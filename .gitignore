@@ -1,0 +1,12 @@
+# Ignores .exe files
+**/*.exe
+# Ignores first_code.cpp because its an experimental file
+first_code.cpp
+# Ignores .vscode
+**/.vscode
+# Ignores the Rectangle.h file
+Rectangle.h
+# Ignores the Rectangle.cpp file
+Rectangle.cpp
+# Ignores .o files
+**/*.o
