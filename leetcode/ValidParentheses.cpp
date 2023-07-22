@@ -3,6 +3,7 @@
 
 using namespace std;
 
+#include <stack>
 class Solution
 {
 public:
@@ -14,9 +15,14 @@ public:
         {
             char ch = s[i];
 
-            if(ch == ']')
+            if (ch == ']')
             {
-                if(charStack.top() != '[')
+                if (charStack.empty())
+                {
+                    status = false;
+                    break;
+                }
+                else if (charStack.top() != '[')
                 {
                     status = false;
                     break;
@@ -24,9 +30,14 @@ public:
                 else
                     charStack.pop();
             }
-            else if(ch == '}')
+            else if (ch == '}')
             {
-                if(charStack.top() != '{')
+                if (charStack.empty())
+                {
+                    status = false;
+                    break;
+                }
+                else if (charStack.top() != '{')
                 {
                     status = false;
                     break;
@@ -34,9 +45,14 @@ public:
                 else
                     charStack.pop();
             }
-            else if(ch == ')')
+            else if (ch == ')')
             {
-                if(charStack.top() != '(')
+                if (charStack.empty())
+                {
+                    status = false;
+                    break;
+                }
+                else if (charStack.top() != '(')
                 {
                     status = false;
                     break;
@@ -44,11 +60,14 @@ public:
                 else
                     charStack.pop();
             }
-            else 
+            else
             {
                 charStack.push(ch);
             }
         }
+
+        if (!charStack.empty())
+            status = false;
         return status;
     }
 };
@@ -56,9 +75,9 @@ public:
 int main()
 {
     Solution solution;
-    string s = "{[({[]})]}";
+    string s = "[]]]]]]";
 
-    if(solution.isValid(s))
+    if (solution.isValid(s))
         cout << "Valid" << endl;
     else
         cout << "Invalid" << endl;
