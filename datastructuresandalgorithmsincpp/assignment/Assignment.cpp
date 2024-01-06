@@ -14,7 +14,11 @@ private:
 public:
     Student(int id)
     {
-        studentId = id;
+        // studentId = id;
+    }
+
+    Student()
+    {
     }
     // ~Student();
 
@@ -40,6 +44,10 @@ public:
     char getSex()
     {
         return sex;
+    }
+
+    void setStudentId(int id){
+        studentId = id;
     }
 
     void setFirstName(string fName)
@@ -133,7 +141,7 @@ private:
     {
         if (nodeptr == nullptr)
             nodeptr = newNode;
-        else if (nodeptr->studentId >= newNode->studentId)
+        else if (nodeptr->studentId > newNode->studentId)
             insertNode(nodeptr->left, newNode);
         else
             insertNode(nodeptr->right, newNode);
@@ -173,15 +181,50 @@ public:
     }
 
     /**
-     * This function calls the displayInOder function 
+     * This function calls the displayInOder function
      * by passing the root node of the Binary Search Tree
      */
     void displayInOrder()
     {
-        if(root)
+        if (root)
             displayInOrder(root);
-        else {
+        else
+        {
             cout << "There are No Students registered at the moment\n\n";
+        }
+    }
+
+    /**
+     * This function searches the binary search tree to 
+     * find a student using student id and displays the
+     * student information if found.
+     */
+    void searchStudent(int studentId)
+    {
+        TreeNode *nodeptr = root;
+
+        bool status = false;
+        while (nodeptr)
+        {
+            if (nodeptr->studentId == studentId)
+            {
+                status = true;
+                cout << "Student id: " << nodeptr->studentId << endl;
+                cout << "First Name: " << nodeptr->studentInfo->getFirstName() << endl;
+                cout << "Last Name: " << nodeptr->studentInfo->getLastName() << endl;
+                cout << "Age: " << nodeptr->studentInfo->getAge() << endl;
+                cout << "Sex: " << nodeptr->studentInfo->getSex() << endl;
+                cout << "-----------------------------------\n";
+            }
+            else if (nodeptr->studentId > studentId)
+                nodeptr = nodeptr->left;
+            else
+                nodeptr = nodeptr->right;
+        }
+
+        if (!status)
+        {
+            cout << "\nThere is No Student with this id!\n\n";
         }
     }
 };
