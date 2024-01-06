@@ -46,7 +46,8 @@ public:
         return sex;
     }
 
-    void setStudentId(int id){
+    void setStudentId(int id)
+    {
         studentId = id;
     }
 
@@ -195,7 +196,7 @@ public:
     }
 
     /**
-     * This function searches the binary search tree to 
+     * This function searches the binary search tree to
      * find a student using student id and displays the
      * student information if found.
      */
@@ -226,5 +227,87 @@ public:
         {
             cout << "\nThere is No Student with this id!\n\n";
         }
+    }
+};
+
+class CourseTree
+{
+private:
+    struct TreeNode
+    {
+        string courseNumber;
+        Course *coursePointer;
+        TreeNode *left;
+        TreeNode *right;
+
+        TreeNode(string coNum, Course *coPtr)
+        {
+            courseNumber = coNum;
+            coursePointer = coPtr;
+            left = nullptr;
+            right = nullptr;
+        }
+    };
+
+    TreeNode *root;
+
+    /**
+     * This function inserts a new node to the binary tree.
+     */
+    void insertNode(TreeNode *&nodeptr, TreeNode *&newNode)
+    {
+        if (nodeptr == nullptr)
+            nodeptr = newNode;
+        else if (nodeptr->courseNumber > newNode->courseNumber)
+            insertNode(nodeptr->left, newNode);
+        else
+            insertNode(nodeptr->right, newNode);
+    }
+
+public:
+    CourseTree()
+    {
+        root = nullptr;
+    }
+
+    /**
+     * This function takes the course number and the course,
+     * creates a new node and calls the insertNode function
+     * by passing the root node and new node.
+     */
+    void insertCourse(string courseNumber, Course *coPtr)
+    {
+        TreeNode *newNode = new TreeNode(courseNumber, coPtr);
+
+        insertNode(root, newNode);
+    }
+
+    /**
+     * This method searches a course from the binary
+     * search tree using its course number.
+     */
+    void searchCourse(string coNum)
+    {
+        TreeNode *nodeptr = root;
+        bool status = false;
+
+        while (nodeptr)
+        {
+            if (nodeptr->courseNumber == coNum)
+            {
+                cout << "Course Number: " << nodeptr->courseNumber << endl;
+                cout << "Course Name: " << nodeptr->coursePointer->getCourseTitle() << endl;
+                cout << "Credit Hour: " << nodeptr->coursePointer->getCreditHour() << endl;
+                cout << "------------------------------------------\n";
+                status = true;
+            }
+            else if (nodeptr->courseNumber > coNum)
+                nodeptr = nodeptr->left;
+            else
+                nodeptr = nodeptr->right;
+        }
+
+        if (!status)
+            cout << "There is No Course By This number!\n\n";
     }
 };
