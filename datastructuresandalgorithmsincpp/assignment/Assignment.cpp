@@ -12,77 +12,118 @@ private:
     char sex;
 
 public:
-    Student(int id){
+    Student(int id)
+    {
         studentId = id;
     }
     // ~Student();
 
-    int getId(){
+    int getId()
+    {
         return studentId;
     }
 
-    string getFirstName(){
+    string getFirstName()
+    {
         return firstName;
     }
-    string getLastName(){
+    string getLastName()
+    {
         return lastName;
     }
 
-    int getAge(){
+    int getAge()
+    {
         return age;
     }
 
-    char getSex(){
+    char getSex()
+    {
         return sex;
     }
 
-    void setFirstName(string fName){
+    void setFirstName(string fName)
+    {
         firstName = fName;
     }
 
-    void setLastName(string lName){
+    void setLastName(string lName)
+    {
         lastName = lName;
     }
 
-    void setAge(int a){
+    void setAge(int a)
+    {
         age = a;
     }
 
-    void setSex(char s){
+    void setSex(char s)
+    {
         sex = s;
     }
-
 };
 
-class Course{
+class Course
+{
 private:
     string courseNumber;
     string courseTitle;
     int creditHour;
 
 public:
-    Course(string courseNum){
+    Course(string courseNum)
+    {
         courseNumber = courseNum;
     }
 
-    string getCourseNumber(){
+    string getCourseNumber()
+    {
         return courseNumber;
     }
 
-    string getCourseTitle(){
+    string getCourseTitle()
+    {
         return courseTitle;
     }
 
-    int getCreditHour(){
+    int getCreditHour()
+    {
         return creditHour;
     }
 
-    void setCourseTitle(string coTitle){
+    void setCourseTitle(string coTitle)
+    {
         courseTitle = coTitle;
     }
 
-    void setCreditHour(int creditHr){
+    void setCreditHour(int creditHr)
+    {
         creditHour = creditHr;
     }
 };
 
+class StudentTree
+{
+private:
+    /*  create a structure called TreeNode
+    that holds the Binary Search Tree Information */
+    struct TreeNode
+    {
+        int studentId;
+        Student *studentInfo;
+        TreeNode *left;
+        TreeNode *right;
+
+        TreeNode(int id, Student *StudInfo)
+        {
+            studentId = id;
+            studentInfo = StudInfo;
+            left = nullptr;
+            right = nullptr;
+        }
+    };
+
+    TreeNode *root; // create a variable for root node;
+
+    
+};
