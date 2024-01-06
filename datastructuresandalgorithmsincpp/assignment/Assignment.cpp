@@ -125,6 +125,10 @@ private:
 
     TreeNode *root; // create a variable for root node;
 
+    /**
+     * This function inserts the student info at the
+     * right node by traversing the tree.
+     */
     void insertNode(TreeNode *&nodeptr, TreeNode *&newNode)
     {
         if (nodeptr == nullptr)
@@ -135,11 +139,49 @@ private:
             insertNode(nodeptr->right, newNode);
     }
 
+    /**
+     * This function displays all the students in the
+     * binary tree in InOrder Traversal
+     */
+    void displayInOrder(TreeNode *nodeptr)
+    {
+        if (nodeptr)
+        {
+            displayInOrder(nodeptr->left);
+
+            cout << "Student Id: " << nodeptr->studentInfo->getId() << endl;
+            cout << "First Name: " << nodeptr->studentInfo->getFirstName() << endl;
+            cout << "Last Name: " << nodeptr->studentInfo->getLastName() << endl;
+            cout << "Age: " << nodeptr->studentInfo->getAge() << endl;
+            cout << "Sex: " << nodeptr->studentInfo->getSex() << endl;
+            cout << "--------------------------------------------\n";
+
+            displayInOrder(nodeptr->right);
+        }
+    }
+
 public:
+    /**
+     * This method accepts the student id and the
+     * student info and passes it to the insertNode function
+     */
     void insertStudent(int id, Student *studInfo)
     {
         TreeNode *newNode = new TreeNode(id, studInfo);
 
         insertNode(root, newNode);
+    }
+
+    /**
+     * This function calls the displayInOder function 
+     * by passing the root node of the Binary Search Tree
+     */
+    void displayInOrder()
+    {
+        if(root)
+            displayInOrder(root);
+        else {
+            cout << "There are No Students registered at the moment\n\n";
+        }
     }
 };
