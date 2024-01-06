@@ -85,6 +85,8 @@ public:
         courseNumber = courseNum;
     }
 
+    Course(){}
+
     string getCourseNumber()
     {
         return courseNumber;
@@ -98,6 +100,10 @@ public:
     int getCreditHour()
     {
         return creditHour;
+    }
+
+    void setCourseNumber(string coNumber){
+        courseNumber = coNumber;
     }
 
     void setCourseTitle(string coTitle)
@@ -116,14 +122,14 @@ class StudentTree
 private:
     /*  create a structure called TreeNode
     that holds the Binary Search Tree Information */
-    struct TreeNode
+    struct StudentTreeNode
     {
         int studentId;
         Student *studentInfo;
-        TreeNode *left;
-        TreeNode *right;
+        StudentTreeNode *left;
+        StudentTreeNode *right;
 
-        TreeNode(int id, Student *StudInfo)
+        StudentTreeNode(int id, Student *StudInfo)
         {
             studentId = id;
             studentInfo = StudInfo;
@@ -132,13 +138,13 @@ private:
         }
     };
 
-    TreeNode *root; // create a variable for root node;
+    StudentTreeNode *root; // create a variable for root node;
 
     /**
      * This function inserts the student info at the
      * right node by traversing the tree.
      */
-    void insertNode(TreeNode *&nodeptr, TreeNode *&newNode)
+    void insertNode(StudentTreeNode *&nodeptr, StudentTreeNode *&newNode)
     {
         if (nodeptr == nullptr)
             nodeptr = newNode;
@@ -152,7 +158,7 @@ private:
      * This function displays all the students in the
      * binary tree in InOrder Traversal
      */
-    void displayInOrder(TreeNode *nodeptr)
+    void displayInOrder(StudentTreeNode *nodeptr)
     {
         if (nodeptr)
         {
@@ -170,13 +176,17 @@ private:
     }
 
 public:
+    StudentTree()
+    {
+        root = nullptr;
+    }
     /**
      * This method accepts the student id and the
      * student info and passes it to the insertNode function
      */
-    void insertStudent(int id, Student *studInfo)
+    void insertStudent(int id, Student &studInfo)
     {
-        TreeNode *newNode = new TreeNode(id, studInfo);
+        StudentTreeNode *newNode = new StudentTreeNode(id, &studInfo);
 
         insertNode(root, newNode);
     }
@@ -202,20 +212,19 @@ public:
      */
     void searchStudent(int studentId)
     {
-        TreeNode *nodeptr = root;
+        StudentTreeNode *nodeptr = root;
 
-        bool status = false;
         while (nodeptr)
         {
             if (nodeptr->studentId == studentId)
             {
-                status = true;
                 cout << "Student id: " << nodeptr->studentId << endl;
                 cout << "First Name: " << nodeptr->studentInfo->getFirstName() << endl;
                 cout << "Last Name: " << nodeptr->studentInfo->getLastName() << endl;
                 cout << "Age: " << nodeptr->studentInfo->getAge() << endl;
                 cout << "Sex: " << nodeptr->studentInfo->getSex() << endl;
                 cout << "-----------------------------------\n";
+                return;
             }
             else if (nodeptr->studentId > studentId)
                 nodeptr = nodeptr->left;
@@ -223,24 +232,21 @@ public:
                 nodeptr = nodeptr->right;
         }
 
-        if (!status)
-        {
-            cout << "\nThere is No Student with this id!\n\n";
-        }
+        cout << "\nThere is No Student with this id!\n\n";
     }
 };
 
 class CourseTree
 {
 private:
-    struct TreeNode
+    struct CourseTreeNode
     {
         string courseNumber;
         Course *coursePointer;
-        TreeNode *left;
-        TreeNode *right;
+        CourseTreeNode *left;
+        CourseTreeNode *right;
 
-        TreeNode(string coNum, Course *coPtr)
+        CourseTreeNode(string coNum, Course *coPtr)
         {
             courseNumber = coNum;
             coursePointer = coPtr;
@@ -249,12 +255,12 @@ private:
         }
     };
 
-    TreeNode *root;
+    CourseTreeNode *root;
 
     /**
      * This function inserts a new node to the binary tree.
      */
-    void insertNode(TreeNode *&nodeptr, TreeNode *&newNode)
+    void insertNode(CourseTreeNode *&nodeptr, CourseTreeNode *&newNode)
     {
         if (nodeptr == nullptr)
             nodeptr = newNode;
@@ -275,9 +281,9 @@ public:
      * creates a new node and calls the insertNode function
      * by passing the root node and new node.
      */
-    void insertCourse(string courseNumber, Course *coPtr)
+    void insertCourse(string courseNumber, Course &coPtr)
     {
-        TreeNode *newNode = new TreeNode(courseNumber, coPtr);
+        CourseTreeNode *newNode = new CourseTreeNode(courseNumber, &coPtr);
 
         insertNode(root, newNode);
     }
@@ -288,8 +294,7 @@ public:
      */
     void searchCourse(string coNum)
     {
-        TreeNode *nodeptr = root;
-        bool status = false;
+        CourseTreeNode *nodeptr = root;
 
         while (nodeptr)
         {
@@ -299,7 +304,7 @@ public:
                 cout << "Course Name: " << nodeptr->coursePointer->getCourseTitle() << endl;
                 cout << "Credit Hour: " << nodeptr->coursePointer->getCreditHour() << endl;
                 cout << "------------------------------------------\n";
-                status = true;
+                return;
             }
             else if (nodeptr->courseNumber > coNum)
                 nodeptr = nodeptr->left;
@@ -307,7 +312,95 @@ public:
                 nodeptr = nodeptr->right;
         }
 
-        if (!status)
-            cout << "There is No Course By This number!\n\n";
+        cout << "There is No Course By This number!\n\n";
     }
 };
+
+int main()
+{
+
+    CourseTree *coBinTree = new CourseTree();
+
+    Course c1;
+    c1.setCourseNumber("Co1");
+    c1.setCourseTitle("Maths");
+    c1.setCreditHour(20);
+
+    Course c2;
+    c2.setCourseNumber("Co2");
+    c2.setCourseTitle("Physics");
+    c2.setCreditHour(20);
+    Course c3;
+    c3.setCourseNumber("Co3");
+    c3.setCourseTitle("asdad");
+    c3.setCreditHour(20);
+    Course c4;
+    c4.setCourseNumber("Co4");
+    c4.setCourseTitle("ojonl");
+    c4.setCreditHour(20);
+    Course c5;
+    c5.setCourseNumber("Co5");
+    c5.setCourseTitle("uihyb");
+    c5.setCreditHour(20);
+
+    coBinTree->insertCourse("Co3", c3);
+    coBinTree->insertCourse("Co4", c4);
+    coBinTree->insertCourse("Co5", c5);
+    coBinTree->insertCourse("Co2", c2);
+    coBinTree->insertCourse("Co1", c1);
+
+    coBinTree->searchCourse("Co1");
+    coBinTree->searchCourse("Co3");
+    coBinTree->searchCourse("Co0");
+
+    // StudentTree *studBinTree = new StudentTree();
+
+    // Student s1;
+    // s1.setStudentId(1);
+    // s1.setAge(20);
+    // s1.setFirstName("Yohannes");
+    // s1.setLastName("Woldeyes");
+    // s1.setSex('M');
+
+    // Student s2;
+    // s2.setStudentId(2);
+    // s2.setAge(20);
+    // s2.setFirstName("Menilik");
+    // s2.setLastName("Woldeyes");
+    // s2.setSex('M');
+    // Student s3;
+    // s3.setStudentId(3);
+    // s3.setAge(20);
+    // s3.setFirstName("Makeda");
+    // s3.setLastName("Woldeyes");
+    // s3.setSex('F');
+    // Student s4;
+    // s4.setStudentId(4);
+    // s4.setAge(20);
+    // s4.setFirstName("Dagmawi");
+    // s4.setLastName("Woldeyes");
+    // s4.setSex('M');
+    // Student s5;
+    // s5.setStudentId(5);
+    // s5.setAge(20);
+    // s5.setFirstName("adsafasf");
+    // s5.setLastName("asfasfas");
+    // s5.setSex('F');
+
+    // cout << "Inserting Students.\n";
+    // studBinTree->insertStudent(3, s3);
+    // studBinTree->insertStudent(1, s1);
+    // studBinTree->insertStudent(2, s2);
+    // studBinTree->insertStudent(4, s4);
+    // studBinTree->insertStudent(5, s5);
+
+    // cout << "Searching for a student.\n";
+    // studBinTree->searchStudent(3);
+    // studBinTree->searchStudent(2);
+    // studBinTree->searchStudent(9);
+
+    // cout << "displaying inorder\n";
+    // studBinTree->displayInOrder();
+
+    // delete studBinTree;
+}
