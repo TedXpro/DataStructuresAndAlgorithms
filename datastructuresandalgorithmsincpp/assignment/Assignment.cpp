@@ -125,5 +125,21 @@ private:
 
     TreeNode *root; // create a variable for root node;
 
-    
+    void insertNode(TreeNode *&nodeptr, TreeNode *&newNode)
+    {
+        if (nodeptr == nullptr)
+            nodeptr = newNode;
+        else if (nodeptr->studentId >= newNode->studentId)
+            insertNode(nodeptr->left, newNode);
+        else
+            insertNode(nodeptr->right, newNode);
+    }
+
+public:
+    void insertStudent(int id, Student *studInfo)
+    {
+        TreeNode *newNode = new TreeNode(id, studInfo);
+
+        insertNode(root, newNode);
+    }
 };
