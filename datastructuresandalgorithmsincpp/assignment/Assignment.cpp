@@ -85,7 +85,7 @@ public:
         courseNumber = courseNum;
     }
 
-    Course(){}
+    Course() {}
 
     string getCourseNumber()
     {
@@ -102,7 +102,8 @@ public:
         return creditHour;
     }
 
-    void setCourseNumber(string coNumber){
+    void setCourseNumber(string coNumber)
+    {
         courseNumber = coNumber;
     }
 
@@ -175,6 +176,72 @@ private:
         }
     }
 
+    /**
+     * This function finds the exact position of the
+     * student to be deleted and passes it to makeDeletion.
+     */
+    void remove(int studId, StudentTreeNode *nodeptr)
+    {
+        if(nodeptr == nullptr)  
+        {
+            cout << "Student Not Found!\n";
+            return;
+        }
+        if (studId > nodeptr->studentId)
+            remove(studId, nodeptr->right);
+        else if (studId < nodeptr->studentId)
+            remove(studId, nodeptr->left);
+        else if (nodeptr->studentId == studId)
+            makeDeletion(nodeptr);
+    }
+
+    /**
+     * This function deletes the treeNode if it actually exists.
+     */
+    void makeDeletion(StudentTreeNode *&nodeptr)
+    {
+        cout << nodeptr->studentId << endl;
+        StudentTreeNode *tempNodePtr = nullptr;
+        // Student *studInfoTODelete = nodeptr->studentInfo;
+        if (nodeptr->right == nullptr)
+        {
+            cout << "Right\n";
+            tempNodePtr = nodeptr;
+            cout << "tempNode:" << tempNodePtr->studentId << endl;
+            // nodeptr = nodeptr->left;
+            nodeptr = nullptr;
+            cout << "NodePtr: " << (nodeptr == nullptr) << endl;
+            // cout << "Deleting Sudent\n";
+            // delete tempNodePtr->studentInfo;
+            cout << "Deleting Node\n";
+            delete tempNodePtr;
+            cout << "NodePtr: " << (nodeptr == nullptr) << endl;
+        }
+        else if (nodeptr->left == nullptr)
+        {
+            tempNodePtr = nodeptr;
+            nodeptr = nodeptr->right;
+            // delete tempNodePtr->studentInfo;
+            delete tempNodePtr;
+        }
+        else
+        {
+            tempNodePtr = nodeptr->right;
+
+            while (tempNodePtr->left)
+                tempNodePtr = tempNodePtr->left;
+
+            tempNodePtr->left = nodeptr->left;
+            StudentTreeNode *tNode = nodeptr;
+            // tempNodePtr = nodeptr;
+            nodeptr = nodeptr->right;
+            // delete tNode->studentInfo;
+            delete tNode;
+        }
+        // delete studInfoTODelete;
+        cout << "Successfull Deleted!\n";
+    }
+
 public:
     StudentTree()
     {
@@ -233,6 +300,15 @@ public:
         }
 
         cout << "\nThere is No Student with this id!\n\n";
+    }
+
+    /**
+     * This function accepts student id to be
+     * deleted and passes it to remove.
+     */
+    void deleteStudent(int studId)
+    {
+        remove(studId, root);
     }
 };
 
@@ -319,80 +395,80 @@ public:
 int main()
 {
 
-    CourseTree *coBinTree = new CourseTree();
+    // CourseTree *coBinTree = new CourseTree();
 
-    Course c1;
-    c1.setCourseNumber("Co1");
-    c1.setCourseTitle("Maths");
-    c1.setCreditHour(20);
+    // Course c1;
+    // c1.setCourseNumber("Co1");
+    // c1.setCourseTitle("Maths");
+    // c1.setCreditHour(20);
 
-    Course c2;
-    c2.setCourseNumber("Co2");
-    c2.setCourseTitle("Physics");
-    c2.setCreditHour(20);
-    Course c3;
-    c3.setCourseNumber("Co3");
-    c3.setCourseTitle("asdad");
-    c3.setCreditHour(20);
-    Course c4;
-    c4.setCourseNumber("Co4");
-    c4.setCourseTitle("ojonl");
-    c4.setCreditHour(20);
-    Course c5;
-    c5.setCourseNumber("Co5");
-    c5.setCourseTitle("uihyb");
-    c5.setCreditHour(20);
+    // Course c2;
+    // c2.setCourseNumber("Co2");
+    // c2.setCourseTitle("Physics");
+    // c2.setCreditHour(20);
+    // Course c3;
+    // c3.setCourseNumber("Co3");
+    // c3.setCourseTitle("asdad");
+    // c3.setCreditHour(20);
+    // Course c4;
+    // c4.setCourseNumber("Co4");
+    // c4.setCourseTitle("ojonl");
+    // c4.setCreditHour(20);
+    // Course c5;
+    // c5.setCourseNumber("Co5");
+    // c5.setCourseTitle("uihyb");
+    // c5.setCreditHour(20);
 
-    coBinTree->insertCourse("Co3", c3);
-    coBinTree->insertCourse("Co4", c4);
-    coBinTree->insertCourse("Co5", c5);
-    coBinTree->insertCourse("Co2", c2);
-    coBinTree->insertCourse("Co1", c1);
+    // coBinTree->insertCourse("Co3", c3);
+    // coBinTree->insertCourse("Co4", c4);
+    // coBinTree->insertCourse("Co5", c5);
+    // coBinTree->insertCourse("Co2", c2);
+    // coBinTree->insertCourse("Co1", c1);
 
-    coBinTree->searchCourse("Co1");
-    coBinTree->searchCourse("Co3");
-    coBinTree->searchCourse("Co0");
+    // coBinTree->searchCourse("Co1");
+    // coBinTree->searchCourse("Co3");
+    // coBinTree->searchCourse("Co0");
 
-    // StudentTree *studBinTree = new StudentTree();
+    StudentTree *studBinTree = new StudentTree();
 
-    // Student s1;
-    // s1.setStudentId(1);
-    // s1.setAge(20);
-    // s1.setFirstName("Yohannes");
-    // s1.setLastName("Woldeyes");
-    // s1.setSex('M');
+    Student s1;
+    s1.setStudentId(1);
+    s1.setAge(20);
+    s1.setFirstName("Yohannes");
+    s1.setLastName("Woldeyes");
+    s1.setSex('M');
 
-    // Student s2;
-    // s2.setStudentId(2);
-    // s2.setAge(20);
-    // s2.setFirstName("Menilik");
-    // s2.setLastName("Woldeyes");
-    // s2.setSex('M');
-    // Student s3;
-    // s3.setStudentId(3);
-    // s3.setAge(20);
-    // s3.setFirstName("Makeda");
-    // s3.setLastName("Woldeyes");
-    // s3.setSex('F');
-    // Student s4;
-    // s4.setStudentId(4);
-    // s4.setAge(20);
-    // s4.setFirstName("Dagmawi");
-    // s4.setLastName("Woldeyes");
-    // s4.setSex('M');
-    // Student s5;
-    // s5.setStudentId(5);
-    // s5.setAge(20);
-    // s5.setFirstName("adsafasf");
-    // s5.setLastName("asfasfas");
-    // s5.setSex('F');
+    Student s2;
+    s2.setStudentId(2);
+    s2.setAge(20);
+    s2.setFirstName("Menilik");
+    s2.setLastName("Woldeyes");
+    s2.setSex('M');
+    Student s3;
+    s3.setStudentId(3);
+    s3.setAge(20);
+    s3.setFirstName("Makeda");
+    s3.setLastName("Woldeyes");
+    s3.setSex('F');
+    Student s4;
+    s4.setStudentId(4);
+    s4.setAge(20);
+    s4.setFirstName("Dagmawi");
+    s4.setLastName("Woldeyes");
+    s4.setSex('M');
+    Student s5;
+    s5.setStudentId(5);
+    s5.setAge(20);
+    s5.setFirstName("adsafasf");
+    s5.setLastName("asfasfas");
+    s5.setSex('F');
 
-    // cout << "Inserting Students.\n";
-    // studBinTree->insertStudent(3, s3);
-    // studBinTree->insertStudent(1, s1);
-    // studBinTree->insertStudent(2, s2);
-    // studBinTree->insertStudent(4, s4);
-    // studBinTree->insertStudent(5, s5);
+    cout << "Inserting Students.\n";
+    studBinTree->insertStudent(3, s3);
+    studBinTree->insertStudent(1, s1);
+    studBinTree->insertStudent(2, s2);
+    studBinTree->insertStudent(4, s4);
+    studBinTree->insertStudent(5, s5);
 
     // cout << "Searching for a student.\n";
     // studBinTree->searchStudent(3);
@@ -402,5 +478,13 @@ int main()
     // cout << "displaying inorder\n";
     // studBinTree->displayInOrder();
 
-    // delete studBinTree;
+    studBinTree->displayInOrder();
+    cout << "Deleting 5\n";
+    studBinTree->deleteStudent(5);
+    studBinTree->displayInOrder();
+    // cout << "Deleting 1\n";
+    // studBinTree->deleteStudent(1);
+    // studBinTree->displayInOrder();
+
+    delete studBinTree;
 }
