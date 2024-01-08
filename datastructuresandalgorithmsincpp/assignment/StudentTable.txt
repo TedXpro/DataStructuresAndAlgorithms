@@ -3,3 +3,5 @@
 3,Makeda,Woldeyes,20,F
 4,Dagmawi,Woldeyes,20,M
 5,adsafasf,asfasfas,20,F
+6,qwerty,zxcvbn,20,M
+6,qwerty,zxcvbn,20,M

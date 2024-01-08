@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -15,15 +16,28 @@ private:
     char sex;
 
 public:
-    Student(int id)
+    Student(int id, string fName, string lName, int a, char s)
     {
-        // studentId = id;
+        studentId = id;
+        firstName = fName;
+        lastName = lName;
+        age = a;
+        sex = s;
     }
 
     Student()
     {
     }
-    // ~Student();
+
+    Student(const Student &obj){
+        studentId = obj.studentId;
+        firstName = obj.firstName;
+        lastName = obj.lastName;
+        age = obj.age;
+        sex = obj.sex;
+    }
+
+    ~Student(){}
 
     int getId()
     {
@@ -129,11 +143,11 @@ private:
     struct StudentTreeNode
     {
         int studentId;
-        Student *studentInfo;
+        Student studentInfo;
         StudentTreeNode *left;
         StudentTreeNode *right;
 
-        StudentTreeNode(int id, Student *StudInfo)
+        StudentTreeNode(int id, const Student &StudInfo)
         {
             studentId = id;
             studentInfo = StudInfo;
@@ -168,11 +182,11 @@ private:
         {
             displayInOrder(nodeptr->left);
 
-            cout << "Student Id: " << nodeptr->studentInfo->getId() << endl;
-            cout << "First Name: " << nodeptr->studentInfo->getFirstName() << endl;
-            cout << "Last Name: " << nodeptr->studentInfo->getLastName() << endl;
-            cout << "Age: " << nodeptr->studentInfo->getAge() << endl;
-            cout << "Sex: " << nodeptr->studentInfo->getSex() << endl;
+            cout << "Student Id: " << nodeptr->studentInfo.getId() << endl;
+            cout << "First Name: " << nodeptr->studentInfo.getFirstName() << endl;
+            cout << "Last Name: " << nodeptr->studentInfo.getLastName() << endl;
+            cout << "Age: " << nodeptr->studentInfo.getAge() << endl;
+            cout << "Sex: " << nodeptr->studentInfo.getSex() << endl;
             cout << "--------------------------------------------\n";
 
             displayInOrder(nodeptr->right);
@@ -251,11 +265,11 @@ private:
             saveToFile(nodeptr->left);
             fstream dataStream;
             dataStream.open("StudentTable.txt", ios::app);
-            dataStream << nodeptr->studentInfo->getId() << ",";
-            dataStream << nodeptr->studentInfo->getFirstName() << ",";
-            dataStream << nodeptr->studentInfo->getLastName() << ",";
-            dataStream << nodeptr->studentInfo->getAge() << ",";
-            dataStream << nodeptr->studentInfo->getSex();
+            dataStream << nodeptr->studentInfo.getId() << ",";
+            dataStream << nodeptr->studentInfo.getFirstName() << ",";
+            dataStream << nodeptr->studentInfo.getLastName() << ",";
+            dataStream << nodeptr->studentInfo.getAge() << ",";
+            dataStream << nodeptr->studentInfo.getSex();
             dataStream << endl;
             dataStream.close();
             saveToFile(nodeptr->right);
@@ -271,9 +285,9 @@ public:
      * This method accepts the student id and the
      * student info and passes it to the insertNode function
      */
-    void insertStudent(int id, Student &studInfo)
+    void insertStudent(int id, Student studInfo)
     {
-        StudentTreeNode *newNode = new StudentTreeNode(id, &studInfo);
+        StudentTreeNode *newNode = new StudentTreeNode(id, studInfo);
 
         insertNode(root, newNode);
     }
@@ -306,10 +320,10 @@ public:
             if (nodeptr->studentId == studentId)
             {
                 cout << "Student id: " << nodeptr->studentId << endl;
-                cout << "First Name: " << nodeptr->studentInfo->getFirstName() << endl;
-                cout << "Last Name: " << nodeptr->studentInfo->getLastName() << endl;
-                cout << "Age: " << nodeptr->studentInfo->getAge() << endl;
-                cout << "Sex: " << nodeptr->studentInfo->getSex() << endl;
+                cout << "First Name: " << nodeptr->studentInfo.getFirstName() << endl;
+                cout << "Last Name: " << nodeptr->studentInfo.getLastName() << endl;
+                cout << "Age: " << nodeptr->studentInfo.getAge() << endl;
+                cout << "Sex: " << nodeptr->studentInfo.getSex() << endl;
                 cout << "-----------------------------------\n";
                 return;
             }
@@ -423,11 +437,16 @@ public:
 };
 
 StudentTree * readFromStudentFile(){
-    StudentTree *studBinTree;
+    StudentTree *studBinTree = new StudentTree();
 
     ifstream readStream;
 
     readStream.open("StudentTable.txt");
+
+    if(!readStream.is_open()){
+        cout << "Error Opening File\n";
+        return nullptr;
+    }
 
     string line;
     while(readStream >> line){
@@ -449,6 +468,8 @@ StudentTree * readFromStudentFile(){
         obj.setSex(ch);
         studBinTree->insertStudent(obj.getId(), obj);
     }
+
+    readStream.close();
     return studBinTree;
 }
 
@@ -490,7 +511,24 @@ int main()
     // coBinTree->searchCourse("Co0");
 
     StudentTree *studBinTree = readFromStudentFile();
-    
+    cout << "Before \n";
+    studBinTree->displayInOrder();
+    cout << endl;
+    studBinTree->displayInOrder();
+
+    Student s1;
+    s1.setStudentId(6);
+    s1.setAge(20);
+    s1.setFirstName("qwerty");
+    s1.setLastName("zxcvbn");
+    s1.setSex('M');
+
+    studBinTree->insertStudent(6, s1);
+    studBinTree->save();
+
+    // cout << "After\n";
+    // studBinTree->save();
+    delete studBinTree;
 
     // Student s1;
     // s1.setStudentId(1);
@@ -533,6 +571,7 @@ int main()
 
     studBinTree->displayInOrder();
     studBinTree->save();
+    // delete studBinTree;
 
     // cout << "Searching for a student.\n";
     // studBinTree->searchStudent(3);
