@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -242,6 +245,23 @@ private:
         cout << "Successfull Deleted!\n";
     }
 
+    void saveToFile(StudentTreeNode *nodeptr)
+    {
+        if(nodeptr){
+            saveToFile(nodeptr->left);
+            fstream dataStream;
+            dataStream.open("StudentTable.txt", ios::app);
+            dataStream << nodeptr->studentInfo->getId() << ",";
+            dataStream << nodeptr->studentInfo->getFirstName() << ",";
+            dataStream << nodeptr->studentInfo->getLastName() << ",";
+            dataStream << nodeptr->studentInfo->getAge() << ",";
+            dataStream << nodeptr->studentInfo->getSex();
+            dataStream << endl;
+            dataStream.close();
+            saveToFile(nodeptr->right);
+        }
+    }
+
 public:
     StudentTree()
     {
@@ -309,6 +329,16 @@ public:
     void deleteStudent(int studId)
     {
         remove(studId, root);
+    }
+    
+    void save(){
+        fstream dataStream;
+        dataStream.open("StudentTable.txt", ios::out);
+
+        dataStream.close();
+        // cout << "Now Writing data to file\n";
+
+        saveToFile(root);
     }
 };
 
@@ -392,6 +422,36 @@ public:
     }
 };
 
+StudentTree * readFromStudentFile(){
+    StudentTree *studBinTree;
+
+    ifstream readStream;
+
+    readStream.open("StudentTable.txt");
+
+    string line;
+    while(readStream >> line){
+        string token;
+        char delimiter = ',';
+        vector<string> info;
+        istringstream stream(line);
+        
+        int i = 0;
+        while (std::getline(stream, token, delimiter))
+            info.push_back(token);
+
+        Student obj;
+        obj.setStudentId(stoi(info[0]));
+        obj.setFirstName(info[1]);
+        obj.setLastName(info[2]);
+        obj.setAge(stoi(info[3]));
+        char ch = info[4][0];
+        obj.setSex(ch);
+        studBinTree->insertStudent(obj.getId(), obj);
+    }
+    return studBinTree;
+}
+
 int main()
 {
 
@@ -429,46 +489,50 @@ int main()
     // coBinTree->searchCourse("Co3");
     // coBinTree->searchCourse("Co0");
 
-    StudentTree *studBinTree = new StudentTree();
+    StudentTree *studBinTree = readFromStudentFile();
+    
 
-    Student s1;
-    s1.setStudentId(1);
-    s1.setAge(20);
-    s1.setFirstName("Yohannes");
-    s1.setLastName("Woldeyes");
-    s1.setSex('M');
+    // Student s1;
+    // s1.setStudentId(1);
+    // s1.setAge(20);
+    // s1.setFirstName("Yohannes");
+    // s1.setLastName("Woldeyes");
+    // s1.setSex('M');
 
-    Student s2;
-    s2.setStudentId(2);
-    s2.setAge(20);
-    s2.setFirstName("Menilik");
-    s2.setLastName("Woldeyes");
-    s2.setSex('M');
-    Student s3;
-    s3.setStudentId(3);
-    s3.setAge(20);
-    s3.setFirstName("Makeda");
-    s3.setLastName("Woldeyes");
-    s3.setSex('F');
-    Student s4;
-    s4.setStudentId(4);
-    s4.setAge(20);
-    s4.setFirstName("Dagmawi");
-    s4.setLastName("Woldeyes");
-    s4.setSex('M');
-    Student s5;
-    s5.setStudentId(5);
-    s5.setAge(20);
-    s5.setFirstName("adsafasf");
-    s5.setLastName("asfasfas");
-    s5.setSex('F');
+    // Student s2;
+    // s2.setStudentId(2);
+    // s2.setAge(20);
+    // s2.setFirstName("Menilik");
+    // s2.setLastName("Woldeyes");
+    // s2.setSex('M');
+    // Student s3;
+    // s3.setStudentId(3);
+    // s3.setAge(20);
+    // s3.setFirstName("Makeda");
+    // s3.setLastName("Woldeyes");
+    // s3.setSex('F');
+    // Student s4;
+    // s4.setStudentId(4);
+    // s4.setAge(20);
+    // s4.setFirstName("Dagmawi");
+    // s4.setLastName("Woldeyes");
+    // s4.setSex('M');
+    // Student s5;
+    // s5.setStudentId(5);
+    // s5.setAge(20);
+    // s5.setFirstName("adsafasf");
+    // s5.setLastName("asfasfas");
+    // s5.setSex('F');
 
-    cout << "Inserting Students.\n";
-    studBinTree->insertStudent(3, s3);
-    studBinTree->insertStudent(1, s1);
-    studBinTree->insertStudent(2, s2);
-    studBinTree->insertStudent(4, s4);
-    studBinTree->insertStudent(5, s5);
+    // cout << "Inserting Students.\n";
+    // studBinTree->insertStudent(3, s3);
+    // studBinTree->insertStudent(1, s1);
+    // studBinTree->insertStudent(2, s2);
+    // studBinTree->insertStudent(4, s4);
+    // studBinTree->insertStudent(5, s5);
+
+    studBinTree->displayInOrder();
+    studBinTree->save();
 
     // cout << "Searching for a student.\n";
     // studBinTree->searchStudent(3);
@@ -478,10 +542,10 @@ int main()
     // cout << "displaying inorder\n";
     // studBinTree->displayInOrder();
 
-    studBinTree->displayInOrder();
-    cout << "Deleting 5\n";
-    studBinTree->deleteStudent(5);
-    studBinTree->displayInOrder();
+    // studBinTree->displayInOrder();
+    // cout << "Deleting 5\n";
+    // studBinTree->deleteStudent(5);
+    // studBinTree->displayInOrder();
     // cout << "Deleting 1\n";
     // studBinTree->deleteStudent(1);
     // studBinTree->displayInOrder();
