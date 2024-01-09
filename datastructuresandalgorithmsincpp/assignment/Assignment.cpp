@@ -466,7 +466,11 @@ public:
     {
         fstream dataStream;
         dataStream.open("CourseTable.txt", ios::out);
-
+        if (!dataStream.is_open())
+        {
+            cout << "Cannot Open file.\n";
+            return;
+        }
         dataStream.close();
         // cout << "Now Writing data to file\n";
 
@@ -494,7 +498,7 @@ CourseTree *readFromCourseFile()
         vector<string> info;
         istringstream stream(line);
 
-        while (std::getline(stream, token, delimiter))
+        while (getline(stream, token, delimiter))
             info.push_back(token);
 
         Course co;
@@ -531,7 +535,7 @@ StudentTree *readFromStudentFile()
         vector<string> info;
         istringstream stream(line);
 
-        while (std::getline(stream, token, delimiter))
+        while (getline(stream, token, delimiter))
             info.push_back(token);
 
         Student obj;
@@ -727,6 +731,24 @@ private:
         }
     }
 
+    void saveToFile(StudentCourseTreeNode *nodeptr){
+        if(nodeptr){
+            saveToFile(nodeptr->left);
+            fstream dataStream;
+            dataStream.open("StudentCourseTable.txt", ios::app);
+            dataStream << nodeptr->studentCourse.getStudentId() << ",";
+            dataStream << nodeptr->studentCourse.getCourseNumber() << ",";
+            dataStream << nodeptr->studentCourse.getCourseName() << ",";
+            dataStream << nodeptr->studentCourse.getGrade() << ",";
+            dataStream << nodeptr->studentCourse.getLetterGrade() << ",";
+            dataStream << nodeptr->studentCourse.getYear() << ",";
+            dataStream << nodeptr->studentCourse.getSemester();
+            dataStream << endl;
+            dataStream.close();
+            saveToFile(nodeptr->right);
+        }
+    }
+
 public:
     StudentCourseTree()
     {
@@ -762,11 +784,62 @@ public:
             cout << "There are No Courses taken by student Id: " << studId << endl;
     }
 
+    void save(){
+        fstream dataStream;
+        dataStream.open("StudentCourseTable.txt", ios::out);
+        if(!dataStream.is_open()){
+            cout << "Cannot Open file.\n";
+            return;
+        }
+        dataStream.close();
+        saveToFile(root);
+    }
+
     // void maintainGrade(int studentId, string coNumber, int semester, int year, int grade, string letterGrade){
     //     StudentCourse studCo(studentId, coNumber, semester, year, grade, letterGrade);
 
     // }
 };
+
+StudentCourseTree *readFromStudentCourseFile()
+{
+    StudentCourseTree *studCoBinTree = new StudentCourseTree();
+
+    ifstream readStream;
+    readStream.open("StudentCourseTable.txt");
+
+    if (!readStream.is_open())
+    {
+        cout << "Error Opening File\n";
+        return nullptr;
+    }
+
+    string line;
+    while (readStream >> line)
+    {
+        string token;
+        char delimiter = ',';
+        vector<string> info;
+        istringstream stream(line);
+
+        while (getline(stream, token, delimiter))
+            info.push_back(token);
+
+        StudentCourse obj;
+        obj.setStudentId(stoi(info[0]));
+        obj.setCourseNumber(info[1]);
+        obj.setCourseName(info[2]);
+        obj.setGrade(stoi(info[3]));
+        obj.setLetterGrade(info[4]);
+        obj.setYear(info[5]);
+        obj.setSemester(stoi(info[6]));
+        string id = info[0] + info[1] + info[5] + info[6];
+        studCoBinTree->insertStudentCourse(id, obj);
+    }
+
+    readStream.close();
+    return studCoBinTree;
+}
 
 int menu()
 {
@@ -797,60 +870,73 @@ int menu()
 int main()
 {
     // StudentCourse sc1(1, "Co1", "Maths", 3, 2024, 100, "A+");
-    StudentCourse sc1;
-    sc1.setStudentId(1);
-    sc1.setCourseNumber("Co1");
-    sc1.setCourseName("Math");
-    sc1.setGrade(100);
-    sc1.setSemester(3);
-    sc1.setYear("2024");
-    sc1.setLetterGrade("A+");
-    cout << "inserted\n";
-    // StudentCourse sc5(5, "Co1", "Maths", 3, "2024", 60, "B+");
-    StudentCourse sc5;
-    sc5.setStudentId(5);
-    sc5.setCourseNumber("Co1");
-    sc5.setCourseName("Math");
-    sc5.setGrade(70);
-    sc5.setSemester(3);
-    sc5.setYear("2024");
-    sc5.setLetterGrade("B");
+    // StudentCourse sc1;
+    // sc1.setStudentId(1);
+    // sc1.setCourseNumber("Co1");
+    // sc1.setCourseName("Math");
+    // sc1.setGrade(100);
+    // sc1.setSemester(3);
+    // sc1.setYear("2024");
+    // sc1.setLetterGrade("A+");
+    // cout << "inserted\n";
+    // // StudentCourse sc5(5, "Co1", "Maths", 3, "2024", 60, "B+");
+    // StudentCourse sc5;
+    // sc5.setStudentId(5);
+    // sc5.setCourseNumber("Co1");
+    // sc5.setCourseName("Math");
+    // sc5.setGrade(70);
+    // sc5.setSemester(3);
+    // sc5.setYear("2024");
+    // sc5.setLetterGrade("B");
 
-    StudentCourse sc2;
-    sc2.setStudentId(2);
-    sc2.setCourseNumber("Co1");
-    sc2.setCourseName("Math");
-    sc2.setGrade(60);
-    sc2.setSemester(3);
-    sc2.setYear("2024");
-    sc2.setLetterGrade("C+");
+    // StudentCourse sc2;
+    // sc2.setStudentId(2);
+    // sc2.setCourseNumber("Co1");
+    // sc2.setCourseName("Math");
+    // sc2.setGrade(60);
+    // sc2.setSemester(3);
+    // sc2.setYear("2024");
+    // sc2.setLetterGrade("C+");
 
-    StudentCourse sc3;
-    sc3.setStudentId(3);
-    sc3.setCourseNumber("Co1");
-    sc3.setCourseName("Math");
-    sc3.setGrade(50);
-    sc3.setSemester(3);
-    sc3.setYear("2024");
-    sc3.setLetterGrade("D");
+    // StudentCourse sc3;
+    // sc3.setStudentId(3);
+    // sc3.setCourseNumber("Co1");
+    // sc3.setCourseName("Math");
+    // sc3.setGrade(50);
+    // sc3.setSemester(3);
+    // sc3.setYear("2024");
+    // sc3.setLetterGrade("D");
 
     // StudentCourse sc3(3, "Co1", "Maths", 3, "2024", 70, "C+");
     // StudentCourse sc2(2, "Co1", "Maths", 3, "2024", 50, "D+");
 
-    StudentCourseTree scTree;
-    cout << "about to\n";
-    scTree.insertStudentCourse("1Co132024", sc5);
-    cout << "I did\n";
-    scTree.insertStudentCourse("5Co132024", sc2);
-    scTree.insertStudentCourse("3Co132024", sc3);
-    scTree.insertStudentCourse("2Co132024", sc1);
-
-    cout << "About to display\n";
-    scTree.display();
+    StudentCourseTree *scTree = readFromStudentCourseFile();
+    // cout << "about to\n";
+    // scTree.insertStudentCourse("1Co132024", sc5);
+    // cout << "I did\n";
+    // scTree.insertStudentCourse("5Co132024", sc2);
+    // scTree.insertStudentCourse("3Co132024", sc3);
+    // scTree.insertStudentCourse("2Co132024", sc1);
+    // scTree.save();
+    // cout << "About to display\n";
+    scTree->display();
 
     cout << "\n displayer\n";
 
-    scTree.displayCourseofStudent(1);
+    scTree->displayCourseofStudent(1);
+    StudentCourse sc4;
+    sc4.setStudentId(4);
+    sc4.setCourseNumber("Co101");
+    sc4.setCourseName("Computer Science");
+    sc4.setGrade(90);
+    sc4.setSemester(3);
+    sc4.setYear("2024");
+    sc4.setLetterGrade("A+");
+    scTree->insertStudentCourse("4Co10132024", sc4);
+    scTree->displayCourseofStudent(4);
+    scTree->save();
+
+    delete scTree;
 
     // int choice = menu();
     // int choice = 9;
