@@ -22,7 +22,7 @@ public:
     }
     // ~Student();
 
-    int getId()
+    int getStudentId()
     {
         return studentId;
     }
@@ -116,10 +116,10 @@ private:
     void displayInOrder(StudentTreeNode *nodeptr)
     {
         if (nodeptr)
-        { 
+        {
             displayInOrder(nodeptr->left);
 
-            cout << "Student Id: " << nodeptr->studentInfo->getId() << endl;
+            cout << "Student Id: " << nodeptr->studentInfo->getStudentId() << endl;
             cout << "First Name: " << nodeptr->studentInfo->getFirstName() << endl;
             cout << "Last Name: " << nodeptr->studentInfo->getLastName() << endl;
             cout << "Age: " << nodeptr->studentInfo->getAge() << endl;

@@ -1,0 +1,6 @@
+Co1,Maths,20
+Co2,Physics,20
+Co3,asdad,20
+Co4,ojonl,20
+Co5,uihyb,20
+CoMa101,Mathematics,6
