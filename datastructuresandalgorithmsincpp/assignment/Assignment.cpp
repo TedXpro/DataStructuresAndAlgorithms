@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
@@ -148,7 +147,7 @@ private:
         StudentTreeNode *left;
         StudentTreeNode *right;
 
-        StudentTreeNode(int id, const Student &StudInfo)
+        StudentTreeNode(int id, Student StudInfo)
         {
             studentId = id;
             studentInfo = StudInfo;
@@ -161,7 +160,7 @@ private:
 
     /**
      * This function inserts the student info at the
-     * right node by traversing the tree.
+     * exact node by traversing the tree.
      */
     void insertNode(StudentTreeNode *&nodeptr, StudentTreeNode *&newNode)
     {
@@ -194,28 +193,23 @@ private:
         }
     }
 
-    // void deleteStudentObject(Student &obj)
-    // {
-    //     delete obj;
-    // }
-
     /**
      * This function finds the exact position of the
      * student to be deleted and passes it to makeDeletion.
      */
-    void remove(int studId, StudentTreeNode *nodeptr)
+    void remove(int studId, StudentTreeNode *&nodeptr)
     {
         if (nodeptr == nullptr)
         {
             cout << "Student Not Found!\n";
             return;
         }
-        if (studId > nodeptr->studentId)
-            remove(studId, nodeptr->right);
-        else if (studId < nodeptr->studentId)
-            remove(studId, nodeptr->left);
-        else if (nodeptr->studentId == studId)
+        if (nodeptr->studentId == studId)
             makeDeletion(nodeptr);
+        else if (studId > nodeptr->studentId)
+            remove(studId, nodeptr->right);
+        else
+            remove(studId, nodeptr->left);
     }
 
     /**
@@ -223,31 +217,16 @@ private:
      */
     void makeDeletion(StudentTreeNode *&nodeptr)
     {
-        cout << nodeptr->studentId << endl;
         StudentTreeNode *tempNodePtr = nullptr;
-        // Student *studInfoTODelete = nodeptr->studentInfo;
         if (nodeptr->right == nullptr)
         {
-            // cout << "Right\n";
             tempNodePtr = nodeptr;
-            // cout << "tempNode:" << tempNodePtr->studentId << endl;
             nodeptr = nodeptr->left;
-            // nodeptr = nullptr;
-            // cout << "NodePtr: " << (nodeptr == nullptr) << endl;
-            // cout << "Deleting Sudent\n";
-            // delete tempNodePtr->studentInfo;
-            cout << "Deleting Node\n";
-            // delete tempNodePtr->studentInfo;
-            // deleteStudentObject(tempNodePtr->studentInfo);
-            delete tempNodePtr;
-            // cout << "NodePtr: " << (nodeptr == nullptr) << endl;
         }
         else if (nodeptr->left == nullptr)
         {
             tempNodePtr = nodeptr;
             nodeptr = nodeptr->right;
-            // delete tempNodePtr->studentInfo;
-            delete tempNodePtr;
         }
         else
         {
@@ -257,14 +236,10 @@ private:
                 tempNodePtr = tempNodePtr->left;
 
             tempNodePtr->left = nodeptr->left;
-            // StudentTreeNode *tNode = nodeptr;
             tempNodePtr = nodeptr;
             nodeptr = nodeptr->right;
-            delete tempNodePtr;
-            // delete tNode->studentInfo;
-            // delete tNode;
         }
-        // delete studInfoTODelete;
+        delete tempNodePtr;
         cout << "Successfull Deleted!\n";
     }
 
@@ -272,7 +247,6 @@ private:
     {
         if (nodeptr)
         {
-            saveToFile(nodeptr->left);
             fstream dataStream;
             dataStream.open("StudentTable.txt", ios::app);
             dataStream << nodeptr->studentInfo.getStudentId() << ",";
@@ -282,6 +256,7 @@ private:
             dataStream << nodeptr->studentInfo.getSex();
             dataStream << endl;
             dataStream.close();
+            saveToFile(nodeptr->left);
             saveToFile(nodeptr->right);
         }
     }
@@ -731,8 +706,10 @@ private:
         }
     }
 
-    void saveToFile(StudentCourseTreeNode *nodeptr){
-        if(nodeptr){
+    void saveToFile(StudentCourseTreeNode *nodeptr)
+    {
+        if (nodeptr)
+        {
             saveToFile(nodeptr->left);
             fstream dataStream;
             dataStream.open("StudentCourseTable.txt", ios::app);
@@ -784,10 +761,12 @@ public:
             cout << "There are No Courses taken by student Id: " << studId << endl;
     }
 
-    void save(){
+    void save()
+    {
         fstream dataStream;
         dataStream.open("StudentCourseTable.txt", ios::out);
-        if(!dataStream.is_open()){
+        if (!dataStream.is_open())
+        {
             cout << "Cannot Open file.\n";
             return;
         }
