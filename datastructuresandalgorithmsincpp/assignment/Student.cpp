@@ -113,8 +113,7 @@ private:
         }
     };
 
-    set<int> ids;
-
+    set<int> ids; // a set to hold all the unique ids of students.
     StudentTreeNode *root; // create a variable for root node;
 
     /**
@@ -160,7 +159,7 @@ private:
     {
         if (nodeptr == nullptr)
         {
-            cout << "Student Not Found!\n";
+            cout << "There is no student by student id = " << studId << endl;
             return;
         }
         if (nodeptr->studentId == studId){
@@ -261,7 +260,7 @@ public:
             insertNode(root, newNode);
         }
         else
-            cout << "A student with id - " << id << " already exists!\n";
+            cout << "A student with student id = " << id << " already exists!\n";
     }
 
     /**
@@ -281,7 +280,7 @@ public:
             displayInOrder(root);
         else
         {
-            cout << "There are No Students registered at the moment\n\n";
+            cout << "There are No Students registered at the moment!\n\n";
         }
     }
 
@@ -312,7 +311,7 @@ public:
                 nodeptr = nodeptr->right;
         }
 
-        cout << "There is No Student with this id!\n\n";
+        cout << "There is No Student with student id = " << studentId << endl;
     }
 
     /**
@@ -369,8 +368,7 @@ StudentTree readFromStudentFile()
         obj.setFirstName(info[1]);
         obj.setLastName(info[2]);
         obj.setAge(stoi(info[3]));
-        char ch = info[4][0];
-        obj.setSex(ch);
+        obj.setSex(info[4][0]);
         studBinTree.insertStudent(obj.getStudentId(), obj);
     }
 
@@ -378,45 +376,45 @@ StudentTree readFromStudentFile()
     return studBinTree;
 }
 
-int main(){
-    StudentTree scTree = readFromStudentFile();
-    // StudentTree scTree;
+// int main(){
+//     StudentTree scTree = readFromStudentFile();
+//     // StudentTree scTree;
 
-    // scTree.displayInOrder();
+//     // scTree.displayInOrder();
 
-    Student s1;
-    s1.setStudentId(1);
-    s1.setAge(20);
-    s1.setFirstName("Yodahe");
-    s1.setLastName("Gossa");
-    s1.setSex('M');
+//     Student s1;
+//     s1.setStudentId(1);
+//     s1.setAge(20);
+//     s1.setFirstName("Yodahe");
+//     s1.setLastName("Gossa");
+//     s1.setSex('M');
 
-    // scTree.displayInOrder();
-    // scTree.save();
+//     // scTree.displayInOrder();
+//     // scTree.save();
 
-    Student s2;
-    s2.setStudentId(2);
-    s2.setAge(20);
-    s2.setFirstName("Yohannes");
-    s2.setLastName("Belay");
-    s2.setSex('M');
-    Student s3;
-    s3.setStudentId(3);
-    s3.setAge(20);
-    s3.setFirstName("Yoak");
-    s3.setLastName("Moges");
-    s3.setSex('M');
-    Student s4;
-    s4.setStudentId(4);
-    s4.setAge(20);
-    s4.setFirstName("qwerty");
-    s4.setLastName("zxcvbn");
-    s4.setSex('M');
-    scTree.insertStudent(1, s1);
-    scTree.insertStudent(2, s2);
-    scTree.insertStudent(3, s3);
-    scTree.insertStudent(4, s4);
-    scTree.displayInOrder();
-    scTree.save();
-    // scTree.insertStudent()
-}
+//     Student s2;
+//     s2.setStudentId(2);
+//     s2.setAge(20);
+//     s2.setFirstName("Yohannes");
+//     s2.setLastName("Belay");
+//     s2.setSex('M');
+//     Student s3;
+//     s3.setStudentId(3);
+//     s3.setAge(20);
+//     s3.setFirstName("Yoak");
+//     s3.setLastName("Moges");
+//     s3.setSex('M');
+//     Student s4;
+//     s4.setStudentId(4);
+//     s4.setAge(20);
+//     s4.setFirstName("qwerty");
+//     s4.setLastName("zxcvbn");
+//     s4.setSex('M');
+//     scTree.insertStudent(1, s1);
+//     scTree.insertStudent(2, s2);
+//     scTree.insertStudent(3, s3);
+//     scTree.insertStudent(4, s4);
+//     scTree.displayInOrder();
+//     scTree.save();
+//     // scTree.insertStudent()
+// }

@@ -23,6 +23,14 @@ public:
 
     Course() {}
 
+    Course(const Course &obj){
+        courseNumber = obj.courseNumber;
+        courseTitle = obj.courseTitle;
+        creditHour = obj.creditHour;
+    }
+
+    ~Course() {}
+
     string getCourseNumber()
     {
         return courseNumber;
@@ -72,7 +80,7 @@ private:
             right = nullptr;
         }
     };
-    set<string> courseNumbers;
+    set<string> courseNumbers; // a set to hold all the unique coursenumbers of courses.
     CourseTreeNode *root;
 
     /**
@@ -123,7 +131,7 @@ private:
     {
         if (nodeptr == nullptr)
         {
-            cout << "There is No Course by this Course Number - " << coNum << endl;
+            cout << "There is No Course by Course Number = " << coNum << endl;
             return;
         }
         if (nodeptr->courseNumber == coNum)
@@ -164,10 +172,11 @@ private:
     }
 
     /**
-     * This method destorys all the nodes in the binary tree 
+     * This method destorys all the nodes in the binary tree
      * when the destructor is called.
      */
-    void destroySubTree(CourseTreeNode *nodeptr){
+    void destroySubTree(CourseTreeNode *nodeptr)
+    {
         if (nodeptr)
         {
             if (nodeptr->left)
@@ -184,9 +193,10 @@ public:
         root = nullptr;
     }
 
-    ~CourseTree(){
+    ~CourseTree()
+    {
         destroySubTree(root);
-        courseNumbers.erase();
+        // courseNumbers.clear();
     }
 
     /**
@@ -194,15 +204,15 @@ public:
      * creates a new node and calls the insertNode function
      * by passing the root node and new node.
      */
-    void insertCourse(string coNumber, Course coPtr)
+    void insertCourse(string coNumber, Course coInfo)
     {
         if (courseNumbers.insert(coNumber).second)
         {
-            CourseTreeNode *newNode = new CourseTreeNode(coNumber, coPtr);
+            CourseTreeNode *newNode = new CourseTreeNode(coNumber, coInfo);
             insertNode(root, newNode);
         }
         else
-            cout << "A course with course number - " << coNumber << " already exists\n";
+            cout << "A course with course number = " << coNumber << " already exists!\n";
     }
 
     bool courseNumberExists(string coNumber)
@@ -234,18 +244,18 @@ public:
                 nodeptr = nodeptr->right;
         }
 
-        cout << "There is No Course By This number!\n\n";
+        cout << "There is No Course with course number = " << coNum;
     }
 
     void save()
     {
         fstream dataStream;
         dataStream.open(COURSE_FILE_NAME, ios::out);
-        if (!dataStream.is_open())
-        {
-            cout << "Cannot Open file.\n";
-            return;
-        }
+        // if (!dataStream.is_open())
+        // {
+        //     cout << "Cannot Open file.\n";
+        //     return;
+        // }
         dataStream.close();
         saveToFile(root);
     }
@@ -260,12 +270,12 @@ public:
         if (root)
             displayInOrder(root);
         else
-            cout << "There are no registered courses\n";
+            cout << "There are no registered courses at the moment!\n";
     }
 };
 
 /**
- * This method reads all the courses from 
+ * This method reads all the courses from
  * the CourseTable.csv file
  */
 CourseTree readFromCourseFile()
@@ -274,13 +284,13 @@ CourseTree readFromCourseFile()
 
     ifstream readStream;
     readStream.open(COURSE_FILE_NAME);
+
     if (!readStream.is_open())
     {
         cout << "Error Opening File\n";
         return coTree;
     }
-    // else
-    // {
+
     string line;
     while (readStream >> line)
     {
@@ -299,40 +309,40 @@ CourseTree readFromCourseFile()
 
         coTree.insertCourse(info[0], co);
     }
-    // }
+
     readStream.close();
     return coTree;
 }
 
-int main()
-{
-    CourseTree coBinTree = readFromCourseFile();
-    Course c1;
-    c1.setCourseNumber("Co1");
-    c1.setCourseTitle("Data Structure and Algorithm");
-    c1.setCreditHour("7");
-    Course c2;
-    c2.setCourseNumber("Co2");
-    c2.setCourseTitle("Numerial Analysis");
-    c2.setCreditHour("5");
-    Course c3;
-    c3.setCourseNumber("Co3");
-    c3.setCourseTitle("Networking");
-    c3.setCreditHour("5");
-    Course c4;
-    c4.setCourseNumber("Co4");
-    c4.setCourseTitle("Discrete Mathematics");
-    c4.setCreditHour("7");
-    Course c5;
-    c5.setCourseNumber("Co5");
-    c5.setCourseTitle("Advanced Database");
-    c5.setCreditHour("6");
+// int main()
+// {
+//     CourseTree coBinTree = readFromCourseFile();
+//     Course c1;
+//     c1.setCourseNumber("Co1");
+//     c1.setCourseTitle("Data Structure and Algorithm");
+//     c1.setCreditHour("7");
+//     Course c2;
+//     c2.setCourseNumber("Co2");
+//     c2.setCourseTitle("Numerial Analysis");
+//     c2.setCreditHour("5");
+//     Course c3;
+//     c3.setCourseNumber("Co3");
+//     c3.setCourseTitle("Networking");
+//     c3.setCreditHour("5");
+//     Course c4;
+//     c4.setCourseNumber("Co4");
+//     c4.setCourseTitle("Discrete Mathematics");
+//     c4.setCreditHour("7");
+//     Course c5;
+//     c5.setCourseNumber("Co6");
+//     c5.setCourseTitle("SoftwareEngineering");
+//     c5.setCreditHour("6");
 
-    coBinTree.insertCourse("Co3", c3);
-    coBinTree.insertCourse("Co4", c4);
-    coBinTree.insertCourse("Co5", c5);
-    coBinTree.insertCourse("Co2", c2);
-    coBinTree.insertCourse("Co1", c1);
-    coBinTree.displayCourses();
-    coBinTree.save();
-}
+//     coBinTree.insertCourse("Co3", c3);
+//     coBinTree.insertCourse("Co4", c4);
+//     coBinTree.insertCourse("Co6", c5);
+//     coBinTree.insertCourse("Co2", c2);
+//     coBinTree.insertCourse("Co1", c1);
+//     coBinTree.displayCourses();
+//     coBinTree.save();
+// }
