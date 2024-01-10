@@ -6,8 +6,13 @@
 
 using namespace std;
 
-const string STUDENT_FILE_NAME = "StudentTable.csv";
+// global variable to holds the file name of StudentTable.
+const string STUDENT_FILE_NAME = "StudentTable.csv"; 
 
+/**
+ * This class holds information for students.
+ * has consturctors, destructors, copy constructors, setters, and getters.
+ */
 class Student
 {
 private:
@@ -92,6 +97,10 @@ public:
     }
 };
 
+/**
+ * This is a binary search tree using for student class.
+ * has operations to insert, delete, search and save to file methods.
+ */
 class StudentTree
 {
 private:
@@ -113,7 +122,7 @@ private:
         }
     };
 
-    set<int> ids; // a set to hold all the unique ids of students.
+    set<int> uniqueIds; // a set to hold all the unique ids of students.
     StudentTreeNode *root; // create a variable for root node;
 
     /**
@@ -163,7 +172,7 @@ private:
             return;
         }
         if (nodeptr->studentId == studId){
-            // ids.erase(studId);
+            uniqueIds.erase(studId);
             makeDeletion(nodeptr);
         }
         else if (studId > nodeptr->studentId)
@@ -240,13 +249,20 @@ private:
     }
 
 public:
+    /**
+     * Constructor to initialize the root node and set to nullptr.
+     */
     StudentTree()
     {
         root = nullptr;
     }
 
+    /**
+     * Destructor called when program execution called.
+     */
     ~StudentTree(){
         destroySubTree(root);
+        uniqueIds.clear();
     }
 
     /**
@@ -255,7 +271,7 @@ public:
      */
     void insertStudent(int id, Student studInfo)
     {
-        if(ids.insert(id).second){
+        if(uniqueIds.insert(id).second){
             StudentTreeNode *newNode = new StudentTreeNode(id, studInfo);
             insertNode(root, newNode);
         }
@@ -267,7 +283,7 @@ public:
      * This method checks if a student with a specific id exists.
      */
     bool studentIdExists(int id){
-        return ids.find(id) != ids.end();
+        return uniqueIds.find(id) != uniqueIds.end();
     }
 
     /**
@@ -323,14 +339,16 @@ public:
         remove(studId, root);
     }
 
+    /**
+     * This method clears all the existing information 
+     * from the student file and calls the saveToFile 
+     * to save all the nodes to the student file.
+     */
     void save()
     {
         fstream dataStream;
         dataStream.open(STUDENT_FILE_NAME, ios::out);
-
         dataStream.close();
-        // cout << "Now Writing data to file\n";
-
         saveToFile(root);
     }
 };
@@ -378,43 +396,19 @@ StudentTree readFromStudentFile()
 
 // int main(){
 //     StudentTree scTree = readFromStudentFile();
-//     // StudentTree scTree;
-
-//     // scTree.displayInOrder();
-
-//     Student s1;
-//     s1.setStudentId(1);
-//     s1.setAge(20);
-//     s1.setFirstName("Yodahe");
-//     s1.setLastName("Gossa");
-//     s1.setSex('M');
-
-//     // scTree.displayInOrder();
-//     // scTree.save();
-
-//     Student s2;
-//     s2.setStudentId(2);
-//     s2.setAge(20);
-//     s2.setFirstName("Yohannes");
-//     s2.setLastName("Belay");
-//     s2.setSex('M');
-//     Student s3;
-//     s3.setStudentId(3);
-//     s3.setAge(20);
-//     s3.setFirstName("Yoak");
-//     s3.setLastName("Moges");
-//     s3.setSex('M');
-//     Student s4;
-//     s4.setStudentId(4);
-//     s4.setAge(20);
-//     s4.setFirstName("qwerty");
-//     s4.setLastName("zxcvbn");
-//     s4.setSex('M');
-//     scTree.insertStudent(1, s1);
-//     scTree.insertStudent(2, s2);
-//     scTree.insertStudent(3, s3);
-//     scTree.insertStudent(4, s4);
-//     scTree.displayInOrder();
+//     scTree.deleteStudent(4);
 //     scTree.save();
-//     // scTree.insertStudent()
+//     Student s1;
+//     s1.setStudentId(4);
+//     s1.setAge(20);
+//     s1.setFirstName("Kebede");
+//     s1.setLastName("Balcha");
+//     s1.setSex('M');
+//     scTree.insertStudent(4, s1);
+//     scTree.save();
+    // scTree.save();
+    // StudentTree scTree;
+    // scTree.displayInOrder();
+    // scTree.displayInOrder();
+    // scTree.save();
 // }

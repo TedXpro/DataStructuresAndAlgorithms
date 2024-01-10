@@ -6,8 +6,13 @@
 
 using namespace std;
 
+// Global variable to holds the file name for courseTable.csv
 const string COURSE_FILE_NAME = "CourseTable.csv";
 
+/**
+ * This class defines the courses.
+ * has constructors, destructor, setters, and getters for the course object.
+ */
 class Course
 {
 private:
@@ -23,7 +28,8 @@ public:
 
     Course() {}
 
-    Course(const Course &obj){
+    Course(const Course &obj)
+    {
         courseNumber = obj.courseNumber;
         courseTitle = obj.courseTitle;
         creditHour = obj.creditHour;
@@ -62,9 +68,16 @@ public:
     }
 };
 
+/**
+ * This class holds the binary search tree for the course class.
+ * has constructor, desturctor, insert, search, delete, and save to file methods.
+ */
 class CourseTree
 {
 private:
+    /**
+     * Structure defined to hold the nodes for the binary search tree.
+     */
     struct CourseTreeNode
     {
         string courseNumber;
@@ -80,7 +93,7 @@ private:
             right = nullptr;
         }
     };
-    set<string> courseNumbers; // a set to hold all the unique coursenumbers of courses.
+    set<string> uniqueCourseNumbers; // a set to hold all the unique coursenumbers of courses.
     CourseTreeNode *root;
 
     /**
@@ -96,6 +109,10 @@ private:
             insertNode(nodeptr->right, newNode);
     }
 
+    /**
+     * This method traverses the tree in inorder and displays
+     * the nodes
+     */
     void displayInOrder(CourseTreeNode *nodeptr)
     {
         if (nodeptr)
@@ -111,6 +128,10 @@ private:
         }
     }
 
+    /**
+     * This method traverses the tree and saves all the
+     * information to course file
+     */
     void saveToFile(CourseTreeNode *nodeptr)
     {
         if (nodeptr)
@@ -127,6 +148,10 @@ private:
         }
     }
 
+    /**
+     * This method traverses the tree to find the exact
+     * node to be delete.
+     */
     void remove(string coNum, CourseTreeNode *&nodeptr)
     {
         if (nodeptr == nullptr)
@@ -135,13 +160,19 @@ private:
             return;
         }
         if (nodeptr->courseNumber == coNum)
+        {
             makeDeletion(nodeptr);
+            uniqueCourseNumbers.erase(coNum);
+        }
         else if (coNum > nodeptr->courseNumber)
             remove(coNum, nodeptr->right);
         else
             remove(coNum, nodeptr->left);
     }
 
+    /**
+     * This method deletes the node(Student).
+     */
     void makeDeletion(CourseTreeNode *&nodeptr)
     {
         CourseTreeNode *tempNodePtr = nullptr;
@@ -188,15 +219,22 @@ private:
     }
 
 public:
+    /**
+     * consturctor to initialize the root node and set it to nullptr.
+     */
     CourseTree()
     {
         root = nullptr;
     }
 
+    /**
+     * Destructor to delete all the nodes from the binary search 
+     * tree and clear the set.
+     */
     ~CourseTree()
     {
         destroySubTree(root);
-        // courseNumbers.clear();
+        uniqueCourseNumbers.clear();
     }
 
     /**
@@ -206,7 +244,7 @@ public:
      */
     void insertCourse(string coNumber, Course coInfo)
     {
-        if (courseNumbers.insert(coNumber).second)
+        if (uniqueCourseNumbers.insert(coNumber).second)
         {
             CourseTreeNode *newNode = new CourseTreeNode(coNumber, coInfo);
             insertNode(root, newNode);
@@ -215,9 +253,13 @@ public:
             cout << "A course with course number = " << coNumber << " already exists!\n";
     }
 
+    /**
+     * This method checks if a course with coNumber exists
+     * in the tree by checking the set.
+     */
     bool courseNumberExists(string coNumber)
     {
-        return courseNumbers.find(coNumber) != courseNumbers.end();
+        return uniqueCourseNumbers.find(coNumber) != uniqueCourseNumbers.end();
     }
 
     /**
@@ -247,24 +289,31 @@ public:
         cout << "There is No Course with course number = " << coNum;
     }
 
+    /**
+     * This method clears the course table file and calls 
+     * save to file method passing the root.
+     */
     void save()
     {
         fstream dataStream;
         dataStream.open(COURSE_FILE_NAME, ios::out);
-        // if (!dataStream.is_open())
-        // {
-        //     cout << "Cannot Open file.\n";
-        //     return;
-        // }
         dataStream.close();
         saveToFile(root);
     }
 
+    /**
+     * This method passes the course number coNum and 
+     * the root to remove method.
+     */
     void deleteCourse(string coNum)
     {
         remove(coNum, root);
     }
 
+    /**
+     * this method passes the root to displayInOrder if the 
+     * root is not null
+     */
     void displayCourses()
     {
         if (root)
@@ -272,6 +321,7 @@ public:
         else
             cout << "There are no registered courses at the moment!\n";
     }
+
 };
 
 /**
@@ -337,7 +387,6 @@ CourseTree readFromCourseFile()
 //     c5.setCourseNumber("Co6");
 //     c5.setCourseTitle("SoftwareEngineering");
 //     c5.setCreditHour("6");
-
 //     coBinTree.insertCourse("Co3", c3);
 //     coBinTree.insertCourse("Co4", c4);
 //     coBinTree.insertCourse("Co6", c5);

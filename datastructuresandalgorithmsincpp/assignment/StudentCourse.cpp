@@ -2,35 +2,50 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <set>
 
 using namespace std;
 
+// Global variable to hold the file name for studentcoursetable.
+const string STUDENT_COURSE_FILE_NAME = "StudentCourseTable.csv";
+
+/**
+ * This class defines the class for student course.
+ * has constructors, destructors, setters, and getters.
+ */
 class StudentCourse
 {
 private:
     int studentId;
     string courseNumber;
-    string courseName;
     int semester;
     string year;
     int grade;
     string letterGrade;
 
 public:
-    StudentCourse(int studId, string coNum, string coName, int sem, string yr, int grade, string lGrade)
+    StudentCourse(int studId, string coNum, int sem, string yr, int grade, string lGrade)
     {
         studentId = studId;
         courseNumber = coNum;
-        courseName = coName;
         semester = sem;
         year = yr;
         grade = grade;
         letterGrade = lGrade;
     }
 
-    StudentCourse()
-    {
+    StudentCourse() {}
+
+    StudentCourse(const StudentCourse &obj) {
+        studentId = obj.studentId;
+        courseNumber = obj.courseNumber;
+        semester = obj.semester;
+        grade = obj.grade;
+        letterGrade = obj.letterGrade;
+        year = obj.year;
     }
+
+    ~StudentCourse() {}
 
     int getStudentId()
     {
@@ -40,11 +55,6 @@ public:
     string getCourseNumber()
     {
         return courseNumber;
-    }
-
-    string getCourseName()
-    {
-        return courseName;
     }
 
     int getSemester()
@@ -77,11 +87,6 @@ public:
         courseNumber = coNum;
     }
 
-    void setCourseName(string coName)
-    {
-        courseName = coName;
-    }
-
     void setSemester(int sem)
     {
         semester = sem;
@@ -103,9 +108,16 @@ public:
     }
 };
 
+/**
+ * This class defines the binary search tree for the student course class.
+ * has insert, save, search methods.
+ */
 class StudentCourseTree
 {
 private:
+    /**
+     * defines the structure for the student course tree.
+     */
     struct StudentCourseTreeNode
     {
         string id;
@@ -122,6 +134,7 @@ private:
         }
     };
 
+    set<string> uniqueStudentCourses;
     StudentCourseTreeNode *root;
 
     /**
@@ -149,7 +162,6 @@ private:
 
             cout << "Student Id: " << nodeptr->studentCourse.getStudentId() << endl;
             cout << "Course Number: " << nodeptr->studentCourse.getCourseNumber() << endl;
-            cout << "Course Name: " << nodeptr->studentCourse.getCourseName() << endl;
             cout << "Grade: " << nodeptr->studentCourse.getGrade() << endl;
             cout << "Letter Grade: " << nodeptr->studentCourse.getLetterGrade() << endl;
             cout << "Year: " << nodeptr->studentCourse.getYear() << endl;
@@ -171,7 +183,6 @@ private:
             if (nodeptr->studentCourse.getStudentId() == studId)
             {
                 cout << "CourseNumber: " << nodeptr->studentCourse.getCourseNumber() << endl;
-                cout << "CourseName: " << nodeptr->studentCourse.getCourseName() << endl;
                 cout << "Grade: " << nodeptr->studentCourse.getGrade() << endl;
                 cout << "Letter Grade: " << nodeptr->studentCourse.getLetterGrade() << endl;
                 cout << "Year: " << nodeptr->studentCourse.getYear() << endl;
@@ -184,38 +195,80 @@ private:
         }
     }
 
+    /**
+     * This method traverses the tree and saves all the
+     * information to course file
+     */
     void saveToFile(StudentCourseTreeNode *nodeptr)
     {
         if (nodeptr)
         {
-            saveToFile(nodeptr->left);
             fstream dataStream;
-            dataStream.open("StudentCourseTable.txt", ios::app);
+            dataStream.open(STUDENT_COURSE_FILE_NAME, ios::app);
             dataStream << nodeptr->studentCourse.getStudentId() << ",";
             dataStream << nodeptr->studentCourse.getCourseNumber() << ",";
-            dataStream << nodeptr->studentCourse.getCourseName() << ",";
             dataStream << nodeptr->studentCourse.getGrade() << ",";
             dataStream << nodeptr->studentCourse.getLetterGrade() << ",";
             dataStream << nodeptr->studentCourse.getYear() << ",";
             dataStream << nodeptr->studentCourse.getSemester();
             dataStream << endl;
             dataStream.close();
+            saveToFile(nodeptr->left);
             saveToFile(nodeptr->right);
         }
     }
 
+    /**
+     * This method destorys all the nodes in the binary tree
+     * when the destructor is called.
+     */
+    void destroySubTree(StudentCourseTreeNode *nodeptr)
+    {
+        if (nodeptr)
+        {
+            if (nodeptr->left)
+                destroySubTree(nodeptr->left);
+            if (nodeptr->right)
+                destroySubTree(nodeptr->right);
+            delete nodeptr;
+        }
+    }
+
 public:
+    /**
+     * Constructor to initialize and set the root to nullptr.
+     */
     StudentCourseTree()
     {
         root = nullptr;
     }
+
+    /**
+     * Desturctor to delete the nodes and clear out the set.
+     */
+    ~StudentCourseTree(){
+        destroySubTree(root);
+        uniqueStudentCourses.clear();
+    }
+    
     /**
      * This function inserts a new student course node to the tree.
      */
-    void insertStudentCourse(string i, StudentCourse studCo)
+    void insertStudentCourse(string str, StudentCourse studCo)
     {
-        StudentCourseTreeNode *newNode = new StudentCourseTreeNode(i, studCo);
-        insertNode(root, newNode);
+        if(uniqueStudentCourses.insert(str).second){
+            StudentCourseTreeNode *newNode = new StudentCourseTreeNode(str, studCo);
+            insertNode(root, newNode);
+        }else
+            cout << "Student " << studCo.getStudentId() << " is already registered to " << studCo.getCourseNumber() << endl;    
+    }
+
+    /**
+     * This method checks if a student is registered to a particular course
+     * in the tree by checking the set using str.
+     */
+    bool StudentCourseExists(string str){
+        return uniqueStudentCourses.find(str) != uniqueStudentCourses.end();    
     }
 
     /**
@@ -239,36 +292,35 @@ public:
             cout << "There are No Courses taken by student Id: " << studId << endl;
     }
 
+    /**
+     * This method clears the StudentCourseTable file and calls
+     * save to file method passing the root.
+     */
     void save()
     {
         fstream dataStream;
-        dataStream.open("StudentCourseTable.txt", ios::out);
-        if (!dataStream.is_open())
-        {
-            cout << "Cannot Open file.\n";
-            return;
-        }
+        dataStream.open(STUDENT_COURSE_FILE_NAME, ios::out);
         dataStream.close();
         saveToFile(root);
     }
 
-    // void maintainGrade(int studentId, string coNumber, int semester, int year, int grade, string letterGrade){
-    //     StudentCourse studCo(studentId, coNumber, semester, year, grade, letterGrade);
-
-    // }
 };
 
-StudentCourseTree *readFromStudentCourseFile()
+/**
+ * This method reads information from studentcourse file 
+ * and adds it to the tree.
+ */
+StudentCourseTree readFromStudentCourseFile()
 {
-    StudentCourseTree *studCoBinTree = new StudentCourseTree();
+    StudentCourseTree studCoBinTree;
 
     ifstream readStream;
-    readStream.open("StudentCourseTable.txt");
+    readStream.open(STUDENT_COURSE_FILE_NAME);
 
     if (!readStream.is_open())
     {
         cout << "Error Opening File\n";
-        return nullptr;
+        return studCoBinTree;
     }
 
     string line;
@@ -285,15 +337,40 @@ StudentCourseTree *readFromStudentCourseFile()
         StudentCourse obj;
         obj.setStudentId(stoi(info[0]));
         obj.setCourseNumber(info[1]);
-        obj.setCourseName(info[2]);
-        obj.setGrade(stoi(info[3]));
-        obj.setLetterGrade(info[4]);
-        obj.setYear(info[5]);
-        obj.setSemester(stoi(info[6]));
-        string id = info[0] + info[1] + info[5] + info[6];
-        studCoBinTree->insertStudentCourse(id, obj);
+        obj.setGrade(stoi(info[2]));
+        obj.setLetterGrade(info[3]);
+        obj.setYear(info[4]);
+        obj.setSemester(stoi(info[5]));
+        string id = info[0] + info[1] + info[4] + info[5];
+        studCoBinTree.insertStudentCourse(id, obj);
     }
 
     readStream.close();
     return studCoBinTree;
 }
+
+// int main(){
+    // StudentCourseTree scoTree = readFromStudentCourseFile();
+    // scoTree.display();
+    // cout << "displaying\n";
+    // scoTree.displayCourseofStudent(2);
+    // StudentCourse sc1;
+    // sc1.setCourseNumber("Co1");
+    // sc1.setGrade(85);
+    // sc1.setLetterGrade("A");
+    // sc1.setSemester(3);
+    // sc1.setYear("2024");
+    // sc1.setStudentId(6);
+    // scoTree.insertStudentCourse("6Co120243", sc1);
+    // cout << "trying to insert an already existing node.\n";
+    // StudentCourse sc2;
+    // sc2.setCourseNumber("Co1");
+    // sc2.setGrade(100);
+    // sc2.setLetterGrade("A+");
+    // sc2.setSemester(3);
+    // sc2.setYear("2024");
+    // sc2.setStudentId(1);
+    // scoTree.insertStudentCourse("1Co120243", sc2);
+    // scoTree.display();
+    // scoTree.save();
+// }

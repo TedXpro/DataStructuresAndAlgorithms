@@ -1,53 +1,49 @@
 #include <iostream>
 #include "Student.cpp"
 #include "Course.cpp"
+#include "StudentCourse.cpp"
 
 using namespace std;
 
+int menu()
+{
+    int choice;
+
+    cout << "\t\tWelcome to Student Course Registry:\n";
+    cout << "1. Register Student\n";
+    cout << "2. Display All Students\n";
+    cout << "3. Search Student by Id\n";
+    cout << "4. Register Student To Course\n";
+    cout << "5. Sort Students by Name\n";
+    cout << "6. Delete Student\n";
+    cout << "7. Delete Course\n";
+    cout << "8. Insert Courses\n";
+    cout << "9. EXIT\n";
+    cout << "------------------------------\n";
+    cout << "Enter your Desired choice: ";
+    cin >> choice;
+
+    while (choice <= 0 || choice >= 10)
+    {
+        cout << "Enter your choice between 1 - 8: ";
+        cin >> choice;
+    }
+    return choice;
+}
+
 int main(){
+    cout << "displaying students\n\n";
     StudentTree scTree = readFromStudentFile();
     scTree.displayInOrder();
 
-    // scTree.deleteStudent(4);
-    // scTree.save();
-    Student s1;
-    s1.setStudentId(4);
-    s1.setAge(20);
-    s1.setFirstName("Dagmawi");
-    s1.setLastName("Belay");
-    s1.setSex('M');
-    scTree.insertStudent(4, s1);
+    cout << "displaying courses\n\n";
+    CourseTree coTree = readFromCourseFile();
+    coTree.displayCourses();
 
-    scTree.displayInOrder();
-    scTree.save();
+    cout << "displaying student courses\n\n";
+    StudentCourseTree scoTree = readFromStudentCourseFile();
+    scoTree.display();
 
-    CourseTree coBinTree = readFromCourseFile();
-    Course c1;
-    c1.setCourseNumber("Co1");
-    c1.setCourseTitle("Data Structure and Algorithm");
-    c1.setCreditHour("7");
-    Course c2;
-    c2.setCourseNumber("Co2");
-    c2.setCourseTitle("Numerial Analysis");
-    c2.setCreditHour("5");
-    Course c3;
-    c3.setCourseNumber("Co3");
-    c3.setCourseTitle("Networking");
-    c3.setCreditHour("5");
-    Course c4;
-    c4.setCourseNumber("Co4");
-    c4.setCourseTitle("Discrete Mathematics");
-    c4.setCreditHour("7");
-    Course c5;
-    c5.setCourseNumber("Co6");
-    c5.setCourseTitle("SoftwareEngineering");
-    c5.setCreditHour("6");
-
-    coBinTree.insertCourse("Co3", c3);
-    coBinTree.insertCourse("Co4", c4);
-    coBinTree.insertCourse("Co6", c5);
-    coBinTree.insertCourse("Co2", c2);
-    coBinTree.insertCourse("Co1", c1);
-    coBinTree.displayCourses();
-    coBinTree.save();
+    cout << "Displaying contents for student 1\n";
+    scoTree.displayCourseofStudent(1);
 }

@@ -1,4 +1,0 @@
-1,Yohannes,Belay,20,M
-2,Menilik,Belay,28,M
-3,Milka,Elias,80,F
-4,Dagmawi,Belay,20,M

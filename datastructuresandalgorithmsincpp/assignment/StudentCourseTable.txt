@@ -1,5 +1,0 @@
-1,Co1,Math,100,A+,2024,3
-2,Co1,Math,60,C+,2024,3
-3,Co1,Math,50,D,2024,3
-4,Co101,Computer Science,90,A+,2024,3
-5,Co1,Math,70,B,2024,3
