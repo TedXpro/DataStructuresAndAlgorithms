@@ -168,7 +168,7 @@ private:
     {
         if (nodeptr == nullptr)
         {
-            cout << "There is no student by student id = " << studId << endl;
+            cout << "\n\nThere is no student by student id = " << studId << endl << endl;
             return;
         }
         if (nodeptr->studentId == studId){
@@ -281,6 +281,7 @@ public:
 
     /**
      * This method checks if a student with a specific id exists.
+     * @return true if student exists in the tree.
      */
     bool studentIdExists(int id){
         return uniqueIds.find(id) != uniqueIds.end();
@@ -353,6 +354,116 @@ public:
     }
 };
 
+class StudentNameTree
+{
+private:
+    struct StudentNameTreeNode
+    {
+        string name;
+        Student studentInfo;
+        StudentNameTreeNode *left;
+        StudentNameTreeNode *right;
+
+        StudentNameTreeNode(string n, Student stud){
+            name = n;
+            studentInfo = stud;
+            left = nullptr;
+            right = nullptr;
+        }
+    };
+
+    StudentNameTreeNode *root;
+
+    /**
+     * This function is called by the destructor to destroy
+     * all the nodes in the binary tree.
+     */
+    void destroySubTree(StudentNameTreeNode *nodeptr)
+    {
+        if (nodeptr)
+        {
+            if (nodeptr->left)
+                destroySubTree(nodeptr->left);
+            if (nodeptr->right)
+                destroySubTree(nodeptr->right);
+            delete nodeptr;
+        }
+    }
+
+    /**
+     * This function inserts the student info at the
+     * exact node by traversing the tree.
+     */
+    void insertNode(StudentNameTreeNode *&nodeptr, StudentNameTreeNode *&newNode)
+    {
+        if (nodeptr == nullptr)
+            nodeptr = newNode;
+        else if (nodeptr->name > newNode->name)
+            insertNode(nodeptr->left, newNode);
+        else
+            insertNode(nodeptr->right, newNode);
+    }
+
+    /**
+     * This function displays all the students in the
+     * binary tree in InOrder Traversal
+     */
+    void displayInOrder(StudentNameTreeNode *nodeptr)
+    {
+        if (nodeptr)
+        {
+            displayInOrder(nodeptr->left);
+
+            cout << "First Name: " << nodeptr->studentInfo.getFirstName() << endl;
+            cout << "Last Name: " << nodeptr->studentInfo.getLastName() << endl;
+            cout << "Age: " << nodeptr->studentInfo.getAge() << endl;
+            cout << "Sex: " << nodeptr->studentInfo.getSex() << endl;
+            cout << "Student Id: " << nodeptr->studentInfo.getStudentId() << endl;
+            cout << "--------------------------------------------\n";
+
+            displayInOrder(nodeptr->right);
+        }
+    }
+
+public:
+    /**
+     * Constructor to initialize the root node and set to nullptr.
+     */
+    StudentNameTree(){
+        root = nullptr;
+    }
+
+    /**
+     * Destructor called when program execution called.
+     */
+    ~StudentNameTree(){
+        destroySubTree(root);
+    }
+
+    /**
+     * This method accepts the student id and the
+     * student info and passes it to the insertNode function
+     */
+    void insertStudent(string name, Student stud){
+        StudentNameTreeNode *newNode = new StudentNameTreeNode(name, stud);
+        insertNode(root, newNode);
+    }
+
+    /**
+     * This function calls the displayInOder function
+     * by passing the root node of the Binary Search Tree
+     */
+    void displayInOrder()
+    {
+        if (root)
+            displayInOrder(root);
+        else
+        {
+            cout << "There are No Students registered at the moment!\n\n";
+        }
+    }
+};
+
 /**
  * This method reads all the students from StudentTable.csv
  */
@@ -392,6 +503,49 @@ StudentTree readFromStudentFile()
 
     readStream.close();
     return studBinTree;
+}
+
+/**
+ * This method reads all the students from StudentTable.csv
+ */
+StudentNameTree readFromStudentFileInName()
+{
+    StudentNameTree studNTree;
+
+    ifstream readStream;
+
+    readStream.open(STUDENT_FILE_NAME);
+
+    if (!readStream.is_open())
+    {
+        cout << "Error Opening File\n";
+        return studNTree;
+    }
+
+    string line;
+    while (readStream >> line)
+    {
+        string token;
+        char delimiter = ',';
+        vector<string> info;
+        istringstream stream(line);
+
+        while (getline(stream, token, delimiter))
+            info.push_back(token);
+
+        Student obj;
+        obj.setStudentId(stoi(info[0]));
+        obj.setFirstName(info[1]);
+        obj.setLastName(info[2]);
+        obj.setAge(stoi(info[3]));
+        obj.setSex(info[4][0]);
+
+        string name = info[1] + info[2] + info[0];
+        studNTree.insertStudent(name, obj);
+    }
+
+    readStream.close();
+    return studNTree;
 }
 
 // int main(){

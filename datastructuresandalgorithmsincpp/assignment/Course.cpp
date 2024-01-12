@@ -156,7 +156,7 @@ private:
     {
         if (nodeptr == nullptr)
         {
-            cout << "There is No Course by Course Number = " << coNum << endl;
+            cout << "\n\nThere is No Course by Course Number = " << coNum << endl << endl;
             return;
         }
         if (nodeptr->courseNumber == coNum)
@@ -256,6 +256,7 @@ public:
     /**
      * This method checks if a course with coNumber exists
      * in the tree by checking the set.
+     * @return true if course number exists in the tree.
      */
     bool courseNumberExists(string coNumber)
     {

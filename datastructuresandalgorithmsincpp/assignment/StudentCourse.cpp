@@ -266,6 +266,7 @@ public:
     /**
      * This method checks if a student is registered to a particular course
      * in the tree by checking the set using str.
+     * @return true if student course exists.
      */
     bool StudentCourseExists(string str){
         return uniqueStudentCourses.find(str) != uniqueStudentCourses.end();    
