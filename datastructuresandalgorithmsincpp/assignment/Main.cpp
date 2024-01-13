@@ -10,9 +10,11 @@ string getLetterGrade(int);
 StudentCourse registerStudentToCourse(string, string, string &);
 int menu();
 
-int main(){
+int main()
+{
     int choice = menu();
-    if(choice == 10){
+    if (choice == 10)
+    {
         cout << endl;
         cout << "\t\t****************************\n";
         cout << "\t\t**->Thank you for using!<-**\n";
@@ -24,10 +26,12 @@ int main(){
     CourseTree coTree = readFromCourseFile();
     StudentCourseTree studCoTree = readFromStudentCourseFile();
 
-    do{
+    do
+    {
         string studId;
         string coNumber;
-        if(choice == 1){
+        if (choice == 1)
+        {
             cout << "Enter Student id: ";
             cin >> studId;
             while (studTree.studentIdExists(studId))
@@ -40,15 +44,21 @@ int main(){
             studTree.insertStudent(stud.getStudentId(), stud);
             studTree.save();
             cout << "You have successfully register a student.\n";
-        } else if(choice == 2){
+        }
+        else if (choice == 2)
+        {
             cout << "List of all of the students\n";
             studTree.displayInOrder();
             cout << "===========================================\n";
-        } else if(choice == 3){
+        }
+        else if (choice == 3)
+        {
             cout << "Enter student id to search: ";
             cin >> studId;
             studTree.searchStudent(studId);
-        } else if(choice == 4){            
+        }
+        else if (choice == 4)
+        {
             cout << "Enter student id: ";
             cin >> studId;
             while (!studTree.studentIdExists(studId))
@@ -57,10 +67,11 @@ int main(){
                 cout << "Please enter another id: ";
                 cin >> studId;
             }
-            
+
             cout << "Enter Course Number: ";
             cin >> coNumber;
-            while(!coTree.courseNumberExists(coNumber)){
+            while (!coTree.courseNumberExists(coNumber))
+            {
                 cout << "There is no course with course number: " << coNumber << " registered!\n";
                 cout << "Please enter another course number: ";
                 cin >> coNumber;
@@ -71,16 +82,22 @@ int main(){
             studCoTree.insertStudentCourse(id, studCo);
             studCoTree.save();
             cout << "\nRegistered student to course successfully!\n";
-        } else if(choice == 5){
+        }
+        else if (choice == 5)
+        {
             StudentNameTree studNameTree = readFromStudentFileInName();
             studNameTree.displayInOrder();
             cout << endl;
-        } else if(choice == 6){
+        }
+        else if (choice == 6)
+        {
             cout << "Enter Student id to delete student: ";
             cin >> studId;
             studTree.deleteStudent(studId);
             studTree.save();
-        } else if(choice == 7){
+        }
+        else if (choice == 7)
+        {
 
             cout << "Enter Course Number to register: ";
             cin >> coNumber;
@@ -106,12 +123,16 @@ int main(){
 
             coTree.insertCourse(coNumber, co);
             coTree.save();
-        } else if(choice == 8){
+        }
+        else if (choice == 8)
+        {
             cout << "Enter CourseNumber to be deleted: ";
             cin >> coNumber;
             coTree.deleteCourse(coNumber);
             coTree.save();
-        }else if(choice == 9){
+        }
+        else if (choice == 9)
+        {
             cout << "Enter Student Id: ";
             cin >> studId;
             while (!studTree.studentIdExists(studId))
@@ -149,11 +170,14 @@ int main(){
             }
 
             string id = studId + coNumber + year + to_string(semester);
-            if(!studCoTree.StudentCourseExists(id)){
-                cout << "There is no student with student id " << studId << " registered to course number " << coNumber << endl;
+            if (!studCoTree.StudentCourseExists(id))
+            {
+                cout << "There is no student with student id " << studId << " registered to course number " << coNumber
+                     << " for year " << year << " semester " << semester << endl;
                 cout << "please try again!\n";
             }
-            else {
+            else
+            {
                 int grade;
                 cout << "Enter New Grade: ";
                 cin >> grade;
@@ -168,7 +192,7 @@ int main(){
                 cout << "Successfully updated grade!\n";
             }
         }
-        
+
         choice = menu();
     } while (choice != 10);
 
@@ -213,10 +237,10 @@ int menu()
  * This function is called when a user wants to register a student.
  * accepts student information and returns the student information.
  */
-Student registerStudent(string studId){
+Student registerStudent(string studId)
+{
     Student stud;
-    
-   
+
     stud.setStudentId(studId);
 
     string fName, lName;
@@ -246,10 +270,11 @@ Student registerStudent(string studId){
 }
 
 /**
- * This method accepts infos needed for studentcourse class 
+ * This method accepts infos needed for studentcourse class
  * and returns it.
  */
-StudentCourse registerStudentToCourse(string studId, string coNumber, string &id){
+StudentCourse registerStudentToCourse(string studId, string coNumber, string &id)
+{
     StudentCourse studCo;
 
     studCo.setStudentId(studId);
@@ -258,7 +283,8 @@ StudentCourse registerStudentToCourse(string studId, string coNumber, string &id
     string year;
     cout << "Enter Year: ";
     cin >> year;
-    while(year.length() != 4){
+    while (year.length() != 4)
+    {
         cout << "Enter a valid year: ";
         cin >> year;
     }
@@ -267,7 +293,8 @@ StudentCourse registerStudentToCourse(string studId, string coNumber, string &id
     int semester;
     cout << "Enter semester: ";
     cin >> semester;
-    while(semester < 1 || semester > 2){
+    while (semester < 1 || semester > 2)
+    {
         cout << "Enter a valid Semester: ";
         cin >> semester;
     }
@@ -292,22 +319,23 @@ StudentCourse registerStudentToCourse(string studId, string coNumber, string &id
  * This method accepts integer grade and returns
  * corresponding letter grade.
  */
-string getLetterGrade(int grade){
-    if(grade >= 90 && grade <= 100)
+string getLetterGrade(int grade)
+{
+    if (grade >= 90 && grade <= 100)
         return "A+";
-    else if(grade < 90 && grade >= 83)
+    else if (grade < 90 && grade >= 83)
         return "A";
-    else if(grade < 83 && grade >= 80)
+    else if (grade < 83 && grade >= 80)
         return "A-";
-    else if(grade >= 75 && grade < 80)
+    else if (grade >= 75 && grade < 80)
         return "B+";
-    else if(grade >= 68 && grade < 75)
+    else if (grade >= 68 && grade < 75)
         return "B";
-    else if(grade >= 60 && grade < 68)
+    else if (grade >= 60 && grade < 68)
         return "B-";
-    else if(grade >= 55 && grade < 60)
+    else if (grade >= 55 && grade < 60)
         return "C";
-    else if(grade > 50 && grade < 55)
+    else if (grade > 50 && grade < 55)
         return "D";
     return "F";
 }
