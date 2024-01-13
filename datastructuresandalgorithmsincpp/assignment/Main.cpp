@@ -5,35 +5,10 @@
 
 using namespace std;
 
-Student registerStudent(int);
+Student registerStudent(string);
 string getLetterGrade(int);
-StudentCourse registerStudentToCourse(int, string, string &);
-
-int menu()
-{
-    int choice;
-
-    cout << "\t\tWelcome to Student Course Registry:\n";
-    cout << "1. Register Student\n";
-    cout << "2. Display All Students\n";
-    cout << "3. Search Student by Id\n";
-    cout << "4. Register Student To Course\n";
-    cout << "5. Sort Students by Name\n";
-    cout << "6. Delete Student\n";
-    cout << "7. Insert Courses\n";
-    cout << "8. Delete Course\n";
-    cout << "9. EXIT\n";
-    cout << "------------------------------\n";
-    cout << "Enter your Desired choice: ";
-    cin >> choice;
-
-    while (choice <= 0 || choice >= 10)
-    {
-        cout << "Enter your choice between 1 - 8: ";
-        cin >> choice;
-    }
-    return choice;
-}
+StudentCourse registerStudentToCourse(string, string, string &);
+int menu();
 
 int main(){
     int choice = menu();
@@ -47,7 +22,7 @@ int main(){
     StudentCourseTree studCoTree = readFromStudentCourseFile();
 
     do{
-        int studId;
+        string studId;
         string coNumber;
         if(choice == 1){
             cout << "Enter Student id: ";
@@ -144,10 +119,39 @@ int main(){
 }
 
 /**
+ * This function displays the menu contents and returns a choice.
+ */
+int menu()
+{
+    int choice;
+
+    cout << "\t\tWelcome to Student Course Registry:\n";
+    cout << "1. Register Student\n";
+    cout << "2. Display All Students\n";
+    cout << "3. Search Student by Id\n";
+    cout << "4. Register Student To Course\n";
+    cout << "5. Display Students sorted by Name\n";
+    cout << "6. Delete Student\n";
+    cout << "7. Insert Courses\n";
+    cout << "8. Delete Course\n";
+    cout << "9. EXIT\n";
+    cout << "------------------------------\n";
+    cout << "Enter your Desired choice: ";
+    cin >> choice;
+
+    while (choice <= 0 || choice >= 10)
+    {
+        cout << "Enter your choice between 1 - 8: ";
+        cin >> choice;
+    }
+    return choice;
+}
+
+/**
  * This function is called when a user wants to register a student.
  * accepts student information and returns the student information.
  */
-Student registerStudent(int studId){
+Student registerStudent(string studId){
     Student stud;
     
    
@@ -183,7 +187,7 @@ Student registerStudent(int studId){
  * This method accepts infos needed for studentcourse class 
  * and returns it.
  */
-StudentCourse registerStudentToCourse(int studId, string coNumber, string &id){
+StudentCourse registerStudentToCourse(string studId, string coNumber, string &id){
     StudentCourse studCo;
 
     studCo.setStudentId(studId);
@@ -217,7 +221,7 @@ StudentCourse registerStudentToCourse(int studId, string coNumber, string &id){
     }
     studCo.setGrade(grade);
     studCo.setLetterGrade(getLetterGrade(grade));
-    id = to_string(studId) + coNumber + year + to_string(semester);
+    id = studId + coNumber + year + to_string(semester);
 
     return studCo;
 }

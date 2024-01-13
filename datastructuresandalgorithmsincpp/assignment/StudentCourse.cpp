@@ -16,7 +16,7 @@ const string STUDENT_COURSE_FILE_NAME = "StudentCourseTable.csv";
 class StudentCourse
 {
 private:
-    int studentId;
+    string studentId;
     string courseNumber;
     int semester;
     string year;
@@ -24,7 +24,7 @@ private:
     string letterGrade;
 
 public:
-    StudentCourse(int studId, string coNum, int sem, string yr, int grade, string lGrade)
+    StudentCourse(string studId, string coNum, int sem, string yr, int grade, string lGrade)
     {
         studentId = studId;
         courseNumber = coNum;
@@ -36,7 +36,8 @@ public:
 
     StudentCourse() {}
 
-    StudentCourse(const StudentCourse &obj) {
+    StudentCourse(const StudentCourse &obj)
+    {
         studentId = obj.studentId;
         courseNumber = obj.courseNumber;
         semester = obj.semester;
@@ -47,7 +48,7 @@ public:
 
     ~StudentCourse() {}
 
-    int getStudentId()
+    string getStudentId()
     {
         return studentId;
     }
@@ -77,7 +78,7 @@ public:
         return letterGrade;
     }
 
-    void setStudentId(int studId)
+    void setStudentId(string studId)
     {
         studentId = studId;
     }
@@ -176,7 +177,7 @@ private:
      * This method accepts the root node, student id and
      * status and displays info of all the courses a student takes
      */
-    void displayStudentCourses(StudentCourseTreeNode *nodeptr, int studId, bool &status)
+    void displayStudentCourses(StudentCourseTreeNode *nodeptr, string studId, bool &status)
     {
         if (nodeptr)
         {
@@ -246,21 +247,24 @@ public:
     /**
      * Desturctor to delete the nodes and clear out the set.
      */
-    ~StudentCourseTree(){
+    ~StudentCourseTree()
+    {
         destroySubTree(root);
         uniqueStudentCourses.clear();
     }
-    
+
     /**
      * This function inserts a new student course node to the tree.
      */
     void insertStudentCourse(string str, StudentCourse studCo)
     {
-        if(uniqueStudentCourses.insert(str).second){
+        if (uniqueStudentCourses.insert(str).second)
+        {
             StudentCourseTreeNode *newNode = new StudentCourseTreeNode(str, studCo);
             insertNode(root, newNode);
-        }else
-            cout << "Student " << studCo.getStudentId() << " is already registered to " << studCo.getCourseNumber() << endl;    
+        }
+        else
+            cout << "Student " << studCo.getStudentId() << " is already registered to " << studCo.getCourseNumber() << endl;
     }
 
     /**
@@ -268,8 +272,9 @@ public:
      * in the tree by checking the set using str.
      * @return true if student course exists.
      */
-    bool StudentCourseExists(string str){
-        return uniqueStudentCourses.find(str) != uniqueStudentCourses.end();    
+    bool StudentCourseExists(string str)
+    {
+        return uniqueStudentCourses.find(str) != uniqueStudentCourses.end();
     }
 
     /**
@@ -284,7 +289,7 @@ public:
      * This function takes the student id of a student and
      * passes it to displayStudentCourses function
      */
-    void displayCourseofStudent(int studId)
+    void displayCourseofStudent(string studId)
     {
         bool status = false;
         displayStudentCourses(root, studId, status);
@@ -304,11 +309,10 @@ public:
         dataStream.close();
         saveToFile(root);
     }
-
 };
 
 /**
- * This method reads information from studentcourse file 
+ * This method reads information from studentcourse file
  * and adds it to the tree.
  */
 StudentCourseTree readFromStudentCourseFile()
@@ -336,7 +340,7 @@ StudentCourseTree readFromStudentCourseFile()
             info.push_back(token);
 
         StudentCourse obj;
-        obj.setStudentId(stoi(info[0]));
+        obj.setStudentId(info[0]);
         obj.setCourseNumber(info[1]);
         obj.setGrade(stoi(info[2]));
         obj.setLetterGrade(info[3]);
@@ -351,27 +355,27 @@ StudentCourseTree readFromStudentCourseFile()
 }
 
 // int main(){
-    // StudentCourseTree scoTree = readFromStudentCourseFile();
-    // scoTree.display();
-    // cout << "displaying\n";
-    // scoTree.displayCourseofStudent(2);
-    // StudentCourse sc1;
-    // sc1.setCourseNumber("Co1");
-    // sc1.setGrade(85);
-    // sc1.setLetterGrade("A");
-    // sc1.setSemester(3);
-    // sc1.setYear("2024");
-    // sc1.setStudentId(6);
-    // scoTree.insertStudentCourse("6Co120243", sc1);
-    // cout << "trying to insert an already existing node.\n";
-    // StudentCourse sc2;
-    // sc2.setCourseNumber("Co1");
-    // sc2.setGrade(100);
-    // sc2.setLetterGrade("A+");
-    // sc2.setSemester(3);
-    // sc2.setYear("2024");
-    // sc2.setStudentId(1);
-    // scoTree.insertStudentCourse("1Co120243", sc2);
-    // scoTree.display();
-    // scoTree.save();
+// StudentCourseTree scoTree = readFromStudentCourseFile();
+// scoTree.display();
+// cout << "displaying\n";
+// scoTree.displayCourseofStudent(2);
+// StudentCourse sc1;
+// sc1.setCourseNumber("Co1");
+// sc1.setGrade(85);
+// sc1.setLetterGrade("A");
+// sc1.setSemester(3);
+// sc1.setYear("2024");
+// sc1.setStudentId(6);
+// scoTree.insertStudentCourse("6Co120243", sc1);
+// cout << "trying to insert an already existing node.\n";
+// StudentCourse sc2;
+// sc2.setCourseNumber("Co1");
+// sc2.setGrade(100);
+// sc2.setLetterGrade("A+");
+// sc2.setSemester(3);
+// sc2.setYear("2024");
+// sc2.setStudentId(1);
+// scoTree.insertStudentCourse("1Co120243", sc2);
+// scoTree.display();
+// scoTree.save();
 // }

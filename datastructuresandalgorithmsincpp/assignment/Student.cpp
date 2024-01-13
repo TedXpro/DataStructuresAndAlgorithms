@@ -16,14 +16,14 @@ const string STUDENT_FILE_NAME = "StudentTable.csv";
 class Student
 {
 private:
-    int studentId;
+    string studentId;
     string firstName;
     string lastName;
     int age;
     char sex;
 
 public:
-    Student(int id, string fName, string lName, int a, char s)
+    Student(string id, string fName, string lName, int a, char s)
     {
         studentId = id;
         firstName = fName;
@@ -47,7 +47,7 @@ public:
 
     ~Student() {}
 
-    int getStudentId()
+    string getStudentId()
     {
         return studentId;
     }
@@ -71,7 +71,7 @@ public:
         return sex;
     }
 
-    void setStudentId(int id)
+    void setStudentId(string id)
     {
         studentId = id;
     }
@@ -108,12 +108,12 @@ private:
     that holds the Binary Search Tree Information */
     struct StudentTreeNode
     {
-        int studentId;
+        string studentId;
         Student studentInfo;
         StudentTreeNode *left;
         StudentTreeNode *right;
 
-        StudentTreeNode(int id, Student StudInfo)
+        StudentTreeNode(string id, Student StudInfo)
         {
             studentId = id;
             studentInfo = StudInfo;
@@ -122,7 +122,7 @@ private:
         }
     };
 
-    set<int> uniqueIds; // a set to hold all the unique ids of students.
+    set<string> uniqueIds; // a set to hold all the unique ids of students.
     StudentTreeNode *root; // create a variable for root node;
 
     /**
@@ -164,7 +164,7 @@ private:
      * This function finds the exact position of the
      * student to be deleted and passes it to makeDeletion.
      */
-    void remove(int studId, StudentTreeNode *&nodeptr)
+    void remove(string studId, StudentTreeNode *&nodeptr)
     {
         if (nodeptr == nullptr)
         {
@@ -269,7 +269,7 @@ public:
      * This method accepts the student id and the
      * student info and passes it to the insertNode function
      */
-    void insertStudent(int id, Student studInfo)
+    void insertStudent(string id, Student studInfo)
     {
         if(uniqueIds.insert(id).second){
             StudentTreeNode *newNode = new StudentTreeNode(id, studInfo);
@@ -283,7 +283,7 @@ public:
      * This method checks if a student with a specific id exists.
      * @return true if student exists in the tree.
      */
-    bool studentIdExists(int id){
+    bool studentIdExists(string id){
         return uniqueIds.find(id) != uniqueIds.end();
     }
 
@@ -306,7 +306,7 @@ public:
      * find a student using student id and displays the
      * student information if found.
      */
-    void searchStudent(int studentId)
+    void searchStudent(string studentId)
     {
         StudentTreeNode *nodeptr = root;
 
@@ -335,7 +335,7 @@ public:
      * This function accepts student id to be
      * deleted and passes it to remove.
      */
-    void deleteStudent(int studId)
+    void deleteStudent(string studId)
     {
         remove(studId, root);
     }
@@ -493,7 +493,7 @@ StudentTree readFromStudentFile()
             info.push_back(token);
 
         Student obj;
-        obj.setStudentId(stoi(info[0]));
+        obj.setStudentId(info[0]);
         obj.setFirstName(info[1]);
         obj.setLastName(info[2]);
         obj.setAge(stoi(info[3]));
@@ -534,7 +534,7 @@ StudentNameTree readFromStudentFileInName()
             info.push_back(token);
 
         Student obj;
-        obj.setStudentId(stoi(info[0]));
+        obj.setStudentId(info[0]);
         obj.setFirstName(info[1]);
         obj.setLastName(info[2]);
         obj.setAge(stoi(info[3]));
