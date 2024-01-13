@@ -309,6 +309,22 @@ public:
         dataStream.close();
         saveToFile(root);
     }
+
+    void maintainGrade(string id, int newGrade, string newLetterGrade){
+        StudentCourseTreeNode *nodeptr = root;
+
+        while(nodeptr){
+            if(nodeptr->id == id){
+                nodeptr->studentCourse.setGrade(newGrade);
+                nodeptr->studentCourse.setLetterGrade(newLetterGrade);
+                break;
+            }
+            else if(nodeptr->id > id)
+                nodeptr = nodeptr->left;
+            else
+                nodeptr = nodeptr->right;
+        }
+    }
 };
 
 /**

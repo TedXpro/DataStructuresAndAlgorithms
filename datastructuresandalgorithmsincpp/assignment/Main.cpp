@@ -12,8 +12,11 @@ int menu();
 
 int main(){
     int choice = menu();
-    if(choice == 9){
-        cout << "Thank you for using!\n";
+    if(choice == 10){
+        cout << endl;
+        cout << "\t\t****************************\n";
+        cout << "\t\t**->Thank you for using!<-**\n";
+        cout << "\t\t****************************\n";
         return 0;
     }
 
@@ -108,14 +111,72 @@ int main(){
             cin >> coNumber;
             coTree.deleteCourse(coNumber);
             coTree.save();
+        }else if(choice == 9){
+            cout << "Enter Student Id: ";
+            cin >> studId;
+            while (!studTree.studentIdExists(studId))
+            {
+                cout << "A student with id: " << studId << " doesn't exists!\n";
+                cout << "Please enter another id: ";
+                cin >> studId;
+            }
+
+            cout << "Enter Course Number: ";
+            cin >> coNumber;
+            while (!coTree.courseNumberExists(coNumber))
+            {
+                cout << "A Course with course number " << coNumber << " doesn't Exists!\n";
+                cout << "Please enter another course number: ";
+                cin >> coNumber;
+            }
+
+            string year;
+            cout << "Enter Year: ";
+            cin >> year;
+            while (year.length() != 4)
+            {
+                cout << "Enter a valid year: ";
+                cin >> year;
+            }
+
+            int semester;
+            cout << "Enter Semester: ";
+            cin >> semester;
+            while (semester < 1 || semester > 2)
+            {
+                cout << "Enter a valid Semester: ";
+                cin >> semester;
+            }
+
+            string id = studId + coNumber + year + to_string(semester);
+            if(!studCoTree.StudentCourseExists(id)){
+                cout << "There is no student with student id " << studId << " registered to course number " << coNumber << endl;
+                cout << "please try again!\n";
+            }
+            else {
+                int grade;
+                cout << "Enter New Grade: ";
+                cin >> grade;
+                while (grade > 100 || grade <= 0)
+                {
+                    cout << "Please enter a valid grade (0 - 100): ";
+                    cin >> grade;
+                }
+                string letGrade = getLetterGrade(grade);
+                studCoTree.maintainGrade(id, grade, letGrade);
+                studCoTree.save();
+                cout << "Successfully updated grade!\n";
+            }
         }
+        
         choice = menu();
-    } while (choice != 9);
+    } while (choice != 10);
 
     cout << endl;
     cout << "\t\t****************************\n";
     cout << "\t\t**->Thank you for using!<-**\n";
     cout << "\t\t****************************\n";
+    return 0;
 }
 
 /**
@@ -134,14 +195,15 @@ int menu()
     cout << "6. Delete Student\n";
     cout << "7. Insert Courses\n";
     cout << "8. Delete Course\n";
-    cout << "9. EXIT\n";
+    cout << "9. Maintain Student Grade\n";
+    cout << "10. EXIT\n";
     cout << "------------------------------\n";
     cout << "Enter your Desired choice: ";
     cin >> choice;
 
-    while (choice <= 0 || choice >= 10)
+    while (choice <= 0 || choice >= 11)
     {
-        cout << "Enter your choice between 1 - 8: ";
+        cout << "Enter your choice between 1 - 10: ";
         cin >> choice;
     }
     return choice;
