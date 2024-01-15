@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    string infixExpression = "(a - b * c) / (d * e ^ f * g + h)"; // "a-(b / (c-d) * e + f) ^g"
+    string infixExpression = "4 + 3*(6*3-12)"; // " a - (b / (c - d) * e + f) ^ g "
     string postfixExpression = "";
     stack<char> st;
 
