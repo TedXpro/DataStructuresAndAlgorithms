@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    string postfixExpression = "24/";
+    string postfixExpression = "23*54*+9-";
     stack<double> postfix;
 
     for(char ch : postfixExpression){
