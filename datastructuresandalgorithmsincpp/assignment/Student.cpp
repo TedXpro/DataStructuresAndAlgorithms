@@ -209,7 +209,7 @@ private:
             nodeptr = nodeptr->right;
         }
         delete tempNodePtr;
-        cout << "Successfull Deleted!\n";
+        cout << "\nSuccessfull Deleted!\n\n";
     }
 
     /**

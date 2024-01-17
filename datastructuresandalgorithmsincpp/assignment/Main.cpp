@@ -189,7 +189,7 @@ int main()
                 string letGrade = getLetterGrade(grade);
                 studCoTree.maintainGrade(id, grade, letGrade);
                 studCoTree.save();
-                cout << "Successfully updated grade!\n";
+                cout << "\nSuccessfully updated grade!\n\n";
             }
         }
 
